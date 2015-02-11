@@ -51,8 +51,8 @@ motionCtrl.controller('MotionController', function($scope, $timeout, $interval) 
     }
   };
 
-  var measureIntervall = 100; //ms
-  var nbrOfMeaurements = 20; 
+  var measureIntervall = 1; //ms
+  var nbrOfMeaurements = 500; 
   /*Total time of measurements will be measureIntervall * nbrOfMeasurements in ms*/
   $scope.onCountdown = function(){
     $scope.counter--;

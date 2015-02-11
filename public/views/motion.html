@@ -20,14 +20,14 @@
       <th>Y</th>
       <th>Z</th>
     </thead>
+    <tbody><!--
       <tr ng-repeat="item in measurements">
         <td>{{item.vX}}</td>
         <td>{{item.vY}}</td>
         <td>{{item.vZ}}</td>
-      </tr>
-    <tbody>
+      </tr>-->
     </tbody>
   </table>
-  <button class="btn btn-default" ng-csv="getArray" filename="motionData.csv" csv-header="getHeader()" field-separator=",">Export to CSV
+  <button class="btn btn-primary btn-lg btn-block btn-warning" ng-csv="getArray" filename="motionData.csv" csv-header="getHeader()" field-separator=","><span class="glyphicon glyphicon-download" aria-hidden="true"></span> Export to CSV
     </button>
 </div>
