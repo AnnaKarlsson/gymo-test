@@ -2,31 +2,30 @@
 	<h1>{{ tagline }}</h1>
 </div>
 
-<div>
-	<table class="table">
-		<tr class="active">
-			<td><strong>Gyro-data:</td>
-			<td></strong></td>
-		</tr>
-		<tr>
-			<td><strong>Alpha:</td>
-			<td>{{ alpha }}</td>
-		</tr>
-		<tr>
-			<td><strong>Beta:</td>
-			<td>{{ beta }}</td>
-		</tr>
-		<tr>
-			<td><strong>Gamma:</td>
-			<td>{{ gamma }}</td>
-		</tr>
-	</table>
-</div>
 <div class="text-center">
-	<button type="button" class="btn btn-primary btn-lg btn-block" ng-click="testGyro()">
-		<span class="glyphicon glyphicon-play" aria-hidden="true"></span> Test wiggle
-	</button>
-	<button type="button" class="btn btn-primary btn-lg btn-block btn-danger" ng-click="recordGyro()">
-		<span class="glyphicon glyphicon-record" aria-hidden="true"></span> Record wiggling
-	</button>
+  <!--<button type="button" class="btn btn-primary btn-lg btn-block" ng-click="testMotion()">
+    <span class="glyphicon glyphicon-play" aria-hidden="true"></span> Test Motion
+  </button>-->
+  <button type="button" class="btn btn-primary btn-lg btn-block btn-success" ng-click="recordGyro()" ng-disabled="isDisabled" ng-model="isDisabled">
+    <span class="glyphicon glyphicon-record" aria-hidden="true"></span> {{rMessage}}
+  </button> 
+</div>
+<div class="table-responsive">
+  <!-- TABLE -->
+  <table class="table table-striped">
+    <thead>
+      <th>Alpha</th>
+      <th>Beta</th>
+      <th>Gamma</th>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in measurements | limitTo:25">
+        <td>{{item.alpha}}</td>
+        <td>{{item.beta}}</td>
+        <td>{{item.gamma}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <button class="btn btn-primary btn-lg btn-block btn-warning" ng-csv="getArray" filename="gyroData.csv" csv-header="getHeader()" field-separator=","><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> Export to CSV
+    </button>
 </div>
