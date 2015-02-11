@@ -1,0 +1,32 @@
+<div align="center">
+	<h1>{{ tagline }}</h1>
+</div>
+
+<div>
+	<table class="table">
+		<tr class="active">
+			<td><strong>Gyro-data:</td>
+			<td></strong></td>
+		</tr>
+		<tr>
+			<td><strong>Alpha:</td>
+			<td>{{ alpha }}</td>
+		</tr>
+		<tr>
+			<td><strong>Beta:</td>
+			<td>{{ beta }}</td>
+		</tr>
+		<tr>
+			<td><strong>Gamma:</td>
+			<td>{{ gamma }}</td>
+		</tr>
+	</table>
+</div>
+<div class="text-center">
+	<button type="button" class="btn btn-primary btn-lg btn-block" ng-click="testGyro()">
+		<span class="glyphicon glyphicon-play" aria-hidden="true"></span> Test wiggle
+	</button>
+	<button type="button" class="btn btn-primary btn-lg btn-block btn-danger" ng-click="recordGyro()">
+		<span class="glyphicon glyphicon-record" aria-hidden="true"></span> Record wiggling
+	</button>
+</div>

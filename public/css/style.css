@@ -1,0 +1,21 @@
+
+.ng-view {
+	padding-bottom:30px; 
+}
+.panel-footer{
+	text-align: right;
+}
+.navbar .navbar-nav {
+  display: inline-block;
+  float: none;
+  vertical-align: top;
+}
+
+.navbar .navbar-collapse {
+  text-align: center;
+}
+
+.btn-group .btn-group-justified-lg{
+	padding-bottom:30px;
+	text-align: center;
+}
