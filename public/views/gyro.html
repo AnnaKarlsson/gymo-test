@@ -7,10 +7,11 @@
     <span class="glyphicon glyphicon-play" aria-hidden="true"></span> Test Motion
   </button>-->
   <button type="button" class="btn btn-primary btn-lg btn-block btn-success" ng-click="recordGyro()" ng-disabled="isDisabled" ng-model="isDisabled">
-    <span class="glyphicon glyphicon-record" aria-hidden="true"></span> {{rMessage}}
+    <span class="glyphicon glyphicon-record" aria-hidden="true"></span> {{ recBtnTxt }}
   </button> 
 </div>
 <div class="table-responsive">
+  <h3 class="text-center">First 10 samples:</h3>
   <!-- TABLE -->
   <table class="table table-striped">
     <thead>
@@ -19,7 +20,7 @@
       <th>Gamma</th>
     </thead>
     <tbody>
-      <tr ng-repeat="item in measurements | limitTo:25">
+      <tr ng-repeat="item in measurements | limitTo:10">
         <td>{{item.alpha}}</td>
         <td>{{item.beta}}</td>
         <td>{{item.gamma}}</td>
