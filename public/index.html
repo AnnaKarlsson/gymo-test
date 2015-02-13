@@ -9,6 +9,7 @@
 
 	<!-- CSS -->
 	<link rel="stylesheet" href="libs/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.2/cosmo/bootstrap.min.css">
 	<link rel="stylesheet" href="css/style.css">
 
 	<!-- JS -->
@@ -33,11 +34,11 @@
 </head>
 <body ng-app="sampleApp" ng-controller="MotionController">
 
-<ul class="nav nav-tabs nav-justified">
-	<li role="presentation"><a href="/motion">Motion</a></li>
-	<li role="presentation"><a href="/gyro">Gyro</a></li>
+<ul class="breadcrumb text-center">
+	<li class="active"><a href="/">Home</a></li>
+	<li><a href="/motion">Motion</a></li>
+ 	<li><a href="/gyro">Gyro</a></li>
 </ul>
-
 <div class="container-fluid">
 	<!-- ANGULAR DYNAMIC CONTENT -->
 	<div ng-view></div>

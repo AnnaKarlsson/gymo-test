@@ -6,7 +6,7 @@ motionCtrl.controller('MotionController', function($scope, $timeout, $interval) 
   $scope.recBtnTxt = "Record motion";
   $scope.measurementsDOWN = [];
   $scope.measurementsUP = [];
-  $scope.sampleProgress = 40;
+  $scope.sampleProgress = 0;
   var notify = new Audio("views/sound/notification.wav");
   var measureIntervall = 1; //ms
   var nbrOfMeaurements = 1000; 
@@ -34,10 +34,10 @@ motionCtrl.controller('MotionController', function($scope, $timeout, $interval) 
   /*NOTE X; -0.4:1.2, Y;-0.2:0.25, Z: 9.6-10 (Apple; -9.98:-9.82, Android; 9.6:10 */
   $scope.onCountdown = function(){
     $scope.counter--;
-    $scope.recBtnTxt = "Recording "+$scope.sampleProgress+"%";
-    $scope.sampleProgress = Math.ceil(100*((1-($scope.counter / nbrOfMeaurements))));
-    $scope.measurementsUP.push({'vX': $scope.valueX, 'vY': $scope.valueY, 'vZ':$scope.valueZ});
     if ($scope.counter > 0) {
+      $scope.measurementsUP.push({'vX': $scope.valueX, 'vY': $scope.valueY, 'vZ':$scope.valueZ});
+      $scope.sampleProgress = Math.ceil(100*((1-($scope.counter / nbrOfMeaurements))));
+      $scope.recBtnTxt = "Recording "+$scope.sampleProgress+"%";
       mytimeout = $timeout($scope.onCountdown,measureIntervall);
     }else{
       if(isRecording){
