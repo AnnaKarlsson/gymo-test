@@ -3,15 +3,13 @@
   <h1>{{ tagline }}</h1>
 </div>
 <hr>
-<div ng-controller="AlertDemoCtrl">
+<div>
   <div ng-repeat="alert in alerts" type="{{alert.type}}">
   <div class="alert alert-dismissible alert-info">
     <button type="button" class="close" ng-click="closeAlert($index)" data-dismiss="alert">×</button>
     {{alert.msg}}
   </div>
   </div>
-
-  <button class='btn btn-default' ng-click="addAlert()">Add Alert</button> <!-- TA BORT!! -->
   <hr>
 </div>
 
@@ -34,12 +32,12 @@
     </thead>
     <tbody>
       <tr ng-repeat="item in measurements | limitTo:10">
-        <td>{{item.vX}}</td>
-        <td>{{item.vY}}</td>
-        <td>{{item.vZ}}</td>
+        <td>{{item.vX | number}}</td>
+        <td>{{item.vY | number}}</td>
+        <td>{{item.vZ | number}}</td>
       </tr>
     </tbody>
   </table>
-  <button class="btn btn-primary btn-lg btn-block btn-warning" ng-csv="getArray" filename="motionData.csv" csv-header="getHeader()" field-separator=","><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> Export to CSV
-    </button>
 </div>
+<button class="btn btn-primary btn-lg btn-block btn-warning" ng-csv="getArray" filename="motionData.csv" csv-header="getHeader()" field-separator=","><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> Export to CSV
+</button>

@@ -21,9 +21,9 @@
     </thead>
     <tbody>
       <tr ng-repeat="item in measurements | limitTo:10">
-        <td>{{item.alpha}}</td>
-        <td>{{item.beta}}</td>
-        <td>{{item.gamma}}</td>
+        <td>{{item.alpha | number}}</td>
+        <td>{{item.beta | number}}</td>
+        <td>{{item.gamma | number}}</td>
       </tr>
     </tbody>
   </table>
