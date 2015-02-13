@@ -3,6 +3,17 @@
   <h1>{{ tagline }}</h1>
 </div>
 <hr>
+<div ng-controller="AlertDemoCtrl">
+  <div ng-repeat="alert in alerts" type="{{alert.type}}">
+  <div class="alert alert-dismissible alert-info">
+    <button type="button" class="close" ng-click="closeAlert($index)" data-dismiss="alert">×</button>
+    {{alert.msg}}
+  </div>
+  </div>
+
+  <button class='btn btn-default' ng-click="addAlert()">Add Alert</button> <!-- TA BORT!! -->
+  <hr>
+</div>
 
 
 <div class="text-center">

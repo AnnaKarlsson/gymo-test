@@ -2,6 +2,7 @@
 var motionCtrl = angular.module('MotionCtrl', ['mediaPlayer','ngSanitize', 'ngCsv']);
 
 motionCtrl.controller('MotionController', function($scope, $timeout, $interval) {
+
   $scope.tagline = 'Never standing still';
   $scope.recBtnTxt = "Record motion";
   $scope.measurementsDOWN = [];
@@ -10,10 +11,11 @@ motionCtrl.controller('MotionController', function($scope, $timeout, $interval) 
   var notify = new Audio("views/sound/notification.wav");
   var measureIntervall = 1; //ms
   var nbrOfMeaurements = 1000; 
+  /*Total time of measurements will be measureIntervall * nbrOfMeasurements in ms*/
   var isRecording = false;
   var isZneg = false;
   var isZpos = false;
-  /*Total time of measurements will be measureIntervall * nbrOfMeasurements in ms*/
+  
 
   if(window.DeviceMotionEvent) {
     window.addEventListener('devicemotion', function(event) {
@@ -74,4 +76,19 @@ motionCtrl.controller('MotionController', function($scope, $timeout, $interval) 
     console.log("downloading motion data as CSV");
   };
   
+});
+
+motionCtrl.controller('AlertDemoCtrl', function ($scope) {
+  $scope.alerts = [
+    { type: 'danger', msg: 'Oh snap! Change a few things up and try submitting again.' },
+    { type: 'success', msg: 'Well done! You successfully read this important alert message.' }
+  ];
+
+  $scope.addAlert = function() {
+    $scope.alerts.push({msg: 'Another alert!'});
+  };
+
+  $scope.closeAlert = function(index) {
+    $scope.alerts.splice(index, 1);
+  };
 });
