@@ -1,5 +1,6 @@
 // modules =================================================
 var express        = require('express');
+var nodemailer     = require("nodemailer");
 var app            = express();
 var mongoose       = require('mongoose');
 var bodyParser     = require('body-parser');
@@ -7,6 +8,14 @@ var methodOverride = require('method-override');
 
 // configuration ===========================================
 
+// create reusable transporter object using SMTP transport
+var transporter = nodemailer.createTransport({
+      service: 'Gmail',
+      auth: {
+          user: 'gyrotion@gmail.com',
+          pass: '8521ochrasy'
+      }
+});
 	
 // config files
 var db = require('./config/db');

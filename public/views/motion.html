@@ -1,8 +1,7 @@
-
 <div align="center">
   <h1>{{ tagline }}</h1>
 </div>
-<hr>
+
 <div>
   <div ng-repeat="alert in alerts" type="{{alert.type}}">
   <div class="alert alert-dismissible alert-info">
@@ -15,11 +14,15 @@
 
 
 <div class="text-center">
-  <!--<button type="button" class="btn btn-primary btn-lg btn-block" ng-click="testMotion()">
-    <span class="glyphicon glyphicon-play" aria-hidden="true"></span> Test Motion
-  </button>-->
-  <button type="button" class="btn btn-primary btn-lg btn-block btn-success" ng-click="recordMotion()" ng-disabled="isDisabled" ng-model="isDisabled"><span class="glyphicon glyphicon-record" aria-hidden="true"></span> {{recBtnTxt}}
-  </button>
+
+  <div ng-hide="!isRecDone" class="ng-hide">
+
+    <button class="btn btn-primary btn-lg btn-block btn-warning" ng-csv="getArray" filename="motionData.csv" csv-header="getHeader()" field-separator=","><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> Send motion to Anna</button>
+
+  </div>
+  <div ng-hide="isRecDone">
+    <button type="button" class="btn btn-primary btn-lg btn-block btn-success" ng-click="recordMotion()" ng-disabled="isDisabled" ng-model="isDisabled"><span class="glyphicon glyphicon-record" aria-hidden="true"></span> {{recBtnTxt}}</button>
+  </div>
 </div>
 <div class="table-responsive">
   <h3 class="text-center">First 10 samples:</h3>
@@ -39,5 +42,3 @@
     </tbody>
   </table>
 </div>
-<button class="btn btn-primary btn-lg btn-block btn-warning" ng-csv="getArray" filename="motionData.csv" csv-header="getHeader()" field-separator=","><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> Export to CSV
-</button>

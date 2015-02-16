@@ -1,7 +1,6 @@
 module.exports = function(app) {
 	app.get('/', function(req, res) {
 		res.sendfile('./public/index.html');
-		console.log("indexing...");
 	});
 	// server routes ===========================================================
 	var Motion = require('./models/motion');
@@ -60,7 +59,6 @@ module.exports = function(app) {
 	// route to handle all angular requests
 	app.get('*', function(req, res) {
 		res.sendfile('./public/index.html');
-		console.log("indexing ;)");
 	});
 
 };
