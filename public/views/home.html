@@ -1,3 +1,30 @@
-<div class="jumbotron text-center">
-	<h1>Best page ever!!</h1>
+<div class="row">
+<div class="col-sm-8 col-sm-offset-2">
+
+  <div id="form-container">
+    <div class="page-header text-center">
+      <div id="status-buttons" class="text-center">
+        <a ui-sref-active="active" ui-sref=".motion"><span><span class="glyphicon glyphicon-move" aria-hidden="true"></span></span> Motion</a>
+        <a ui-sref-active="active" ui-sref=".gyro"><span><span class="glyphicon glyphicon-cd" aria-hidden="true"></span></span> Gyro</a>
+        <a ui-sref-active="active" ui-sref=".send"><span><span class="glyphicon glyphicon-send" aria-hidden="true"></span> Send</a>
+      </div>
+    </div>
+
+    <div class="text-center">
+      <div>
+	    <div ng-repeat="alert in alerts" type="{{alert.type}}">
+        <div class="alert alert-dismissible alert-{{alert.type}}">
+          <button type="button" class="close" ng-click="closeAlert($index)" data-dismiss="alert">×</button>
+          {{alert.msg}}
+        </div>
+        </div>
+      </div>
+	</div>
+      
+    <div class="text-center" id="form-views" ui-view></div>
+  
+  </div>
+
 </div>
+</div>
+

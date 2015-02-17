@@ -1,26 +1,30 @@
 <div align="center">
-  <h1>{{ tagline }}</h1>
-  <hr>{{ message }}<hr>
+  <h1>Sending recordings</h1>
+  Thank you....
 </div>
-<form class="form-horizontal">
-	<fieldset>
-    <legend>Send motion data</legend>
-    <div class="form-group">
+<form name="sendMail" ng-submit="sendMail(sendMail.$valid)" class="form-horizontal" novalidate>
+    <div class="form-group" ng-class="{ 'has-error' : sendMail.email.$invalid && !sendMail.email.$pristine }">
       <label for="emailFrom" class="col-lg-2 control-label">Email</label>
       <div class="col-lg-10">
-        <input type="text" ng-model="emailFrom" class="form-control" id="emailFrom" placeholder="your@email.nu">
+        <input type="email" name="email" ng-model="email" class="form-control" id="emailFrom" placeholder="your@email.nu" ng-model="user.email" required>
+        <p ng-show="sendMail.email.$invalid && !sendMail.email.$pristine" class="help-block">Enter a valid email.</p>
+      </div>
+    </div>
+     <div class="form-group" ng-class="{ 'has-error' : sendMail.model.$invalid && !sendMail.model.$pristine }">
+      <label for="model" class="col-lg-2 control-label">Device model</label>
+      <div class="col-lg-10">
+        <input type="text" name="model" class="form-control" ng-model="user.model" ng-minlength="6" ng-maxlength="20" required>
+        <p ng-show="sendMail.model.$error.minlength" class="help-block">Device model is too short.</p>
+        <p ng-show="sendMail.model.$error.maxlength" class="help-block">Device model is too long.</p>
       </div>
     </div>
     <div class="form-group">
-      <label for="model" class="col-lg-2 control-label">Device model</label>
-      <div class="col-lg-10">
-        <input type="text" ng-model="model" class="form-control" id="model" placeholder="iPhone 4S, Samsung Glaxy S3 or ...">
-      </div>
-    </div>
-    <div class="form-group" ng-hide="isFormDone">
       <div class="col-lg-10 col-lg-offset-2">
-        <button class="btn btn-primary btn-lg btn-block btn-success" ng-click="sendMail()" type="submit" value='Submit', id='submit' class="btn btn-primary" ng-disabled="isDisabled" ng-model="isDisabled"><span class="glyphicon glyphicon-send" aria-hidden="true"></span> Send test-data</button>
+        <button class="btn btn-primary btn-lg btn-block btn-primary" type="submit">Send  
+        <span class="glyphicon glyphicon-send" aria-hidden="true"></span></button>
       </div>
     </div>
-  </fieldset>
 </form>
+
+      <!-- CSV DOWNLOAD BUTTON
+      <button class="btn btn-primary btn-lg btn-block btn-primary" ng-csv="getArray" filename="motionData.csv" csv-header="getHeader()" field-separator=","><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> Done, go to next test</button>-->

@@ -1,4 +1,5 @@
-angular.module('GyroCtrl', ['ngSanitize', 'ngCsv']).controller('GyroController', function($scope, $timeout, $interval) {
+angular.module('GyroCtrl', ['ngSanitize', 'ngCsv'])
+.controller('GyroController', function($scope, $timeout, $interval) {
 
   $scope.tagline = 'Instable!';
   $scope.recBtnTxt = 'Record orientation';
