@@ -1,1 +1,1 @@
-angular.module('sampleApp', ['ngRoute', 'appRoutes', 'MainCtrl', 'MotionCtrl', 'MotionService', 'GyroCtrl', 'GyroService']);
+angular.module('sampleApp', ['ngRoute', 'appRoutes', 'MainCtrl', 'MotionCtrl', 'MotionService', 'GyroCtrl', 'GyroService', 'SendDataCtrl']);

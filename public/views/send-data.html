@@ -1,0 +1,37 @@
+<div align="center">
+  <h1>{{ tagline }}</h1>
+</div>
+<form class="form-horizontal">
+	<fieldset>
+    <legend>Send motion data</legend>
+    <div class="form-group">
+      <label for="inputEmail" class="col-lg-2 control-label">Email</label>
+      <div class="col-lg-10">
+        <input type="text" class="form-control" id="inputEmail" placeholder="Email">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="inputEmail" class="col-lg-2 control-label">Device model</label>
+      <div class="col-lg-10">
+        <input type="text" class="form-control" id="inputModel" placeholder="model">
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-lg-10 col-lg-offset-2">
+        <button type="submit" name='submit', value='Send', id='submit' class="btn btn-primary">Submit</button>
+      </div>
+    </div>
+  </fieldset>
+</form>
+
+<div id="container">
+<div></div>
+Node.JS Email application
+<div>
+	<h1>Mailer In Node.JS</h1>
+	<input id="to" type="text" placeholder="Enter E-mail ID where you want to send" />
+	<input id="subject" type="text" placeholder="Write Subject" />
+	<textarea id="content" cols="40" rows="5" placeholder="Write what you want to send"></textarea>
+	<button id="send_email">Send Email</button>
+	<span id="message"></span>
+</div>

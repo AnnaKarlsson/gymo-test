@@ -1,20 +1,41 @@
 // modules =================================================
 var express        = require('express');
-var nodemailer     = require("nodemailer");
 var app            = express();
 var mongoose       = require('mongoose');
 var bodyParser     = require('body-parser');
 var methodOverride = require('method-override');
 
+
 // configuration ===========================================
 
+/* nodemailer http://www.nodemailer.com */
+var nodemailer = require('nodemailer');
+
 // create reusable transporter object using SMTP transport
-var transporter = nodemailer.createTransport({
-      service: 'Gmail',
-      auth: {
-          user: 'gyrotion@gmail.com',
-          pass: '8521ochrasy'
-      }
+var transporter = nodemailer.createTransport("SMTP",{
+    service: 'Gmail',
+    auth: {
+        user: 'gyrotion@gmail.com',
+        pass: 'losenord12345'
+    }
+});
+
+// setup e-mail data with unicode symbols
+var mailOptions = {
+    from: 'Anna Gymo, <gyrotion@gmail.com>', // sender address
+    to: 'annka673, annka673@student.liu.se', // list of receivers
+    subject: 'Gymo testdata from ', // Subject line
+    text: 'Hello world', // plaintext body
+    html: '<b>Hello world</b>' // html body
+};
+
+// send mail with defined transport object
+transporter.sendMail(mailOptions, function(error, info){
+    if(error){
+        console.log(error);
+    }else{
+        console.log('Message sent: ' + info.response);
+    }
 });
 	
 // config files
@@ -30,6 +51,7 @@ app.use(bodyParser.urlencoded({ extended: true })); // parse application/x-www-f
 
 app.use(methodOverride('X-HTTP-Method-Override')); // override with the X-HTTP-Method-Override header in the request. simulate DELETE/PUT
 app.use(express.static(__dirname + '/public')); // set the static files location /public/img will be /img for users
+
 
 // routes ==================================================
 require('./app/routes')(app); // pass our application into our routes
