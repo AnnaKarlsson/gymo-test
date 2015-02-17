@@ -1,37 +1,26 @@
 <div align="center">
   <h1>{{ tagline }}</h1>
+  <hr>{{ message }}<hr>
 </div>
 <form class="form-horizontal">
 	<fieldset>
     <legend>Send motion data</legend>
     <div class="form-group">
-      <label for="inputEmail" class="col-lg-2 control-label">Email</label>
+      <label for="emailFrom" class="col-lg-2 control-label">Email</label>
       <div class="col-lg-10">
-        <input type="text" class="form-control" id="inputEmail" placeholder="Email">
+        <input type="text" ng-model="emailFrom" class="form-control" id="emailFrom" placeholder="your@email.nu">
       </div>
     </div>
     <div class="form-group">
-      <label for="inputEmail" class="col-lg-2 control-label">Device model</label>
+      <label for="model" class="col-lg-2 control-label">Device model</label>
       <div class="col-lg-10">
-        <input type="text" class="form-control" id="inputModel" placeholder="model">
+        <input type="text" ng-model="model" class="form-control" id="model" placeholder="iPhone 4S, Samsung Glaxy S3 or ...">
       </div>
     </div>
-    <div class="form-group">
+    <div class="form-group" ng-hide="isFormDone">
       <div class="col-lg-10 col-lg-offset-2">
-        <button type="submit" name='submit', value='Send', id='submit' class="btn btn-primary">Submit</button>
+        <button class="btn btn-primary btn-lg btn-block btn-success" ng-click="sendMail()" type="submit" value='Submit', id='submit' class="btn btn-primary" ng-disabled="isDisabled" ng-model="isDisabled"><span class="glyphicon glyphicon-send" aria-hidden="true"></span> Send test-data</button>
       </div>
     </div>
   </fieldset>
 </form>
-
-<div id="container">
-<div></div>
-Node.JS Email application
-<div>
-	<h1>Mailer In Node.JS</h1>
-	<input id="to" type="text" placeholder="Enter E-mail ID where you want to send" />
-	<input id="subject" type="text" placeholder="Write Subject" />
-	<textarea id="content" cols="40" rows="5" placeholder="Write what you want to send"></textarea>
-	<button id="send_email">Send Email</button>
-	<span id="message"></span>
-</div>

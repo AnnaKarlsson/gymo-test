@@ -3,21 +3,35 @@ module.exports = function(app) {
 		res.sendfile('./public/index.html');
 	});
 	// server routes ===========================================================
-	app.get('/send',function(req,res){
-		var mailOptions={
-			to : req.query.to,
-			subject : req.query.subject,
-			text : req.query.text
-		}
+	var nodemailer = require('nodemailer');
+	// create reusable transporter object using SMTP transport
+	var transporter = nodemailer.createTransport("SMTP",{
+	    service: 'Gmail',
+	    auth: {
+	        user: 'gyrotion@gmail.com',
+	        pass: 'losenord12345'
+	    }
+	});
+
+	app.post('/send',function(req,res){
+		// setup e-mail data with unicode symbols
+		var mailOptions = {
+		    from: 'Anna Gymo, <gyrotion@gmail.com>', // sender address
+		    to: 'Anna Gymo, <gyrotion@gmail.com>', // list of receivers
+		    subject: req.body.model + ' GYMO testdata from '+req.body.emailFrom, // Subject line
+		    text: req.body.text, // plaintext body
+		};
 		console.log(mailOptions);
-		smtpTransport.sendMail(mailOptions, function(error, response){
-			if(error){
-				console.log(error);
-				res.end("error");
-			}else{
-				console.log("Message sent: " + response.message);
-				res.end("sent");
-			}
+		// send mail with defined transport object
+		transporter.sendMail(mailOptions, function(error, info){
+    		if(error){
+        		console.log(error);
+        		res.end("error");
+   		 	}else{
+        		console.log('Message sent: ' + info.response);
+        		res.end("sent");
+    		}
+    		transporter.close();
 		});
 	});
 
