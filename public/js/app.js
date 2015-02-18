@@ -18,16 +18,19 @@ angular.module('gymoApp', ['ngAnimate', 'ui.router','TestCtrl'])
         
         // nested states 
         // each of these sections will have their own view
-        // url will be nested (/form/profile)
         .state('form.motion', {
             url: '/motion',
             templateUrl: 'views/motion.html'
         })
         
-        // url will be /form/interests
         .state('form.gyro', {
             url: '/gyro',
             templateUrl: 'views/gyro.html'
+        })
+
+        .state('form.info', {
+            url: '/info',
+            templateUrl: 'views/device-info.html'
         })
         
         // url will be /form/payment
@@ -38,8 +41,5 @@ angular.module('gymoApp', ['ngAnimate', 'ui.router','TestCtrl'])
        
     // catch all route
     // send users to the form page 
-    $urlRouterProvider.otherwise('/form');
+    $urlRouterProvider.otherwise('/form/motion');
 })
-
-// our controller for the form
-// =============================================================================

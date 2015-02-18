@@ -17,9 +17,9 @@
     </thead>
     <tbody>
       <tr ng-repeat="item in measurementsMotion | limitTo:10">
-        <td>{{item.vX | number}}</td>
-        <td>{{item.vY | number}}</td>
-        <td>{{item.vZ | number}}</td>
+        <td>{{item.a | number}}</td>
+        <td>{{item.b | number}}</td>
+        <td>{{item.c | number}}</td>
       </tr>
     </tbody>
   </table>

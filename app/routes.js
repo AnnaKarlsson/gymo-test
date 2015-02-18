@@ -18,17 +18,33 @@ module.exports = function(app) {
 		var mailOptions = {
 		    from: 'Anna Gymo, <gyrotion@gmail.com>', // sender address
 		    to: 'Anna Gymo, <gyrotion@gmail.com>', // list of receivers
-		    subject: req.body.model + ' GYMO testdata from '+req.body.emailFrom, // Subject line
-		    text: req.body.text, // plaintext body
+		    subject: 'GYROtest on '+ req.body.model + ' from '+req.body.emailFrom, // Subject line
+		    html: req.body.gyro // plaintext body
 		};
-		console.log(mailOptions);
+		var mailOptions2 = {
+		    from: 'Anna Gymo, <gyrotion@gmail.com>', // sender address
+		    to: 'Anna Gymo, <gyrotion@gmail.com>', // list of receivers
+		    subject: 'MOTIONtest on '+ req.body.model + ' from '+req.body.emailFrom, // Subject line
+		    html: req.body.motion // plaintext body
+		};
 		// send mail with defined transport object
 		transporter.sendMail(mailOptions, function(error, info){
     		if(error){
         		console.log(error);
-        		res.end("error");
+        		res.end("error1");
    		 	}else{
-        		console.log('Message sent: ' + info.response);
+        		console.log('Message 1 sent: ' + info.response);
+        		res.end("sent");
+    		}
+    		transporter.close();
+		});
+		// send mail with defined transport object
+		transporter.sendMail(mailOptions2, function(error, info){
+    		if(error){
+        		console.log(error);
+        		res.end("error2");
+   		 	}else{
+        		console.log('Message 2 sent: ' + info.response);
         		res.end("sent");
     		}
     		transporter.close();

@@ -1,9 +1,9 @@
 var nX, nY, nZ, nA, nB, nG;
 var alert;
-var isRecDone = true;
-
 var measureIntervall = 1; //ms
-var nbrOfMeaurements = 10; 
+var nbrOfMeaurements = 1000; 
+
+/* Motion listener */
 if(window.DeviceMotionEvent) {
   window.addEventListener('devicemotion', function(event) {
     if(event.acceleration) {
@@ -13,6 +13,7 @@ if(window.DeviceMotionEvent) {
     }
   });
 }
+/* Gyro listener*/
 if(window.DeviceOrientationEvent) {
   window.addEventListener('deviceorientation', function(event) {
     if(event.alpha!=null || event.beta!=null || event.gamma!=null){ 
@@ -23,22 +24,28 @@ if(window.DeviceOrientationEvent) {
   }, false);
 }
 
+/* Controller for test-data */
 angular.module('TestCtrl', ['ngSanitize', 'ngCsv'])
 .controller('formController', function($scope, $timeout, $interval, $http) {
-  console.log('isRecDone: '+$scope.isRecDone);
+  $scope.deviceType = WURFL.form_factor;
+  $scope.deviceName = WURFL.complete_device_name;
   $scope.tagline = 'Never standing still';
   $scope.recBtnTxt = "Record";
-  
+  $scope.noMobileDeive = false;
   $scope.sampleProgress = 0;
   $scope.isRecDone = false;
-  /*Total time of measurements will be measureIntervall * nbrOfMeasurements in ms*/
-
-
   
+  var arrayAsString = '';
+  var gyroString = '';
+  var motionString = '';
+
+  /* ===== RECORD ====== */
   $scope.record= function(){
-    if (nX == undefined || nA == undefined) {
-      $scope.alerts = [ {msg : 'Device motion not supported', type:'info'}];
+    if (!WURFL.is_mobile) {
+      $scope.alerts = [ {msg : 'This device is not support motion', type:'info', label:'Sorry,'}];
+      $scope.isDisabled = true;
     }else{
+      $scope.noMobileDeive = false;
       status = '';
       isStill();
       console.log('after runned isStill() status ='+status);
@@ -49,11 +56,9 @@ angular.module('TestCtrl', ['ngSanitize', 'ngCsv'])
         $scope.measurementsMotion = [];
         $scope.counter = nbrOfMeaurements;
         $scope.rMessage = "Recording ";
-        console.log('Start recording...')
         mytimeout = $timeout($scope.onCountdown,measureIntervall);
-        console.log('...end recording');
       }else{
-        $scope.alerts = [{msg : 'Put your device on a flat surface', type:'danger'}];
+        $scope.alerts = [{msg : 'Put your device on a flat surface', type:'danger', label:'Warning!'}];
       }
     }
   };
@@ -63,8 +68,12 @@ angular.module('TestCtrl', ['ngSanitize', 'ngCsv'])
       $scope.counter--;
       $scope.sampleProgress = Math.ceil(100*((1-($scope.counter / nbrOfMeaurements))));
       $scope.recBtnTxt = "Recording: "+$scope.sampleProgress+"%";
-      $scope.measurementsMotion.push({'vX': nX, 'vY': nY, 'vZ': nZ});
-      $scope.measurementsGyro.push({'alpha': nA, 'beta': nB, 'gamma': nG});
+      if($scope.counter > nbrOfMeaurements -11){
+        $scope.measurementsMotion.push({'a': nX, 'b': nY, 'c': nZ});
+        $scope.measurementsGyro.push({'a': nA, 'b': nB, 'c': nG});
+      }
+      gyroString += nA+','+nB+','+nG+'<br>';
+      motionString += nX+','+nY+','+nZ+'<br>';
       mytimeout = $timeout($scope.onCountdown,measureIntervall);
     }else{
       console.log('in else... : '+$scope.recBtnTxt)
@@ -75,55 +84,67 @@ angular.module('TestCtrl', ['ngSanitize', 'ngCsv'])
       }
     }
     $scope.$apply();
-}
+  }
 
   var mytimeout = $timeout($scope.onCountdown,measureIntervall);
 
-  // CSV download stuff
+  /* ===== CSV Download ===== <-- TO BORT!! -->*/
+  $scope.filename = "testData";
   $scope.getArray = $scope.measurements;
   $scope.getHeader = function () {return ["X", "Y", "Z"]};
   $scope.clickFn = function() {
     console.log("downloading motion data as CSV");
   };
 
+  /* ===== ALERTS =====*/
   $scope.alerts = [];
-
   $scope.addAlert = function(alertMsg) {
     $scope.alerts.push({msg: alertMsg});
   };
-
   $scope.closeAlert = function(index) {
     $scope.alerts.splice(index, 1);
   };
 
-  /* MAIL FORM DATA */
+  /* ===== SUBMIT & MAIL FORM DATA =====*/
+  $scope.formData = {};
+  // function to submit the form after all validation has occurred      
   $scope.sendMail = function(isValid){
-    if(isRecDone && isValid){
+    $scope.onSending = true;
+    if($scope.isRecDone && isValid){
+      console.log('gyrostring: '+gyroString);
       var mail = {
-        emailFrom : $scope.emailFrom,
-        model : $scope.model,
-        text : 'mailing...'
+        emailFrom : $scope.formData.email,
+        model : $scope.deviceType+': '+$scope.deviceName,
+        gyro : 'alpha,beta,gamma<br>'+gyroString,
+        motion : 'x,y,z<br>'+motionString
       }
       var res = $http.post('/send', mail);
       res.success(function(data, status, headers, config) {
         $scope.message = data;
-        $scope.alerts = [{msg:'THANK YOU! <br> Your recordnings has been send!', type:'success'}];
+        $scope.alerts = [{msg:'Your recordnings has been send!', type:'success', label:'THANK YOU!'}];
+        $scope.onSending = true;
       });
       res.error(function(data, status, headers, config) {
-        $scope.alerts = [{msg:'Did not manage to send mail..', type:'danger'}];
+        $scope.alerts = [{msg:'Did not manage to send mail..', type:'danger', label:'Warning!'}];
+        $scope.onSending = false;
       });
 
-    }else if(!isRecDone){
-      $scope.alerts = [{msg:'Your recording is not done', type:'danger'}];
-
+    }else if(!$scope.isRecDone){
+      $scope.alerts = [{msg:'Please make a motion and gyro recording before sending', type:'danger', label:'Missing!'}];
+       $scope.onSending = false;
+    }else if(!formData.email){
+      $scope.alerts = [{msg:'Please fill in your email', type:'warning', label:'Not enough info!'}];
+      $scope.onSending = false;
     }else{
-      $scope.alerts = [{msg:'Fill in form below before sending', type:'warning'}];
-      
+      $scope.alerts = [{msg:'Please fill in form in the "Device"-tab', type:'warning', label:'Not enough info!'}];
+      $scope.onSending = false;
     }
 
-  }
+  };
 });
 
+
+// FIXA DENNA!!!!!
 function isStill(){
   var a1 = Math.floor(nA);
   var b1 = Math.floor(nB);

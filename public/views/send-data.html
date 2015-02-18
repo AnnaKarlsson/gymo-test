@@ -1,30 +1,36 @@
-<div align="center">
-  <h1>Sending recordings</h1>
-  Thank you....
+<div class="form-container">
+            
+  <!-- EMAIL -->
+  <div class="form-group" ng-class="{ 'has-error' : userForm.email.$invalid && !userForm.email.$pristine }">
+    <label>Your Email</label>
+    <input type="email" name="email" class="form-control" ng-model="formData.email" placeholder="your@email.nu" required>
+    <p ng-show="userForm.email.$invalid && !userForm.email.$pristine" class="help-block">Enter a valid email.</p>
+  </div>
+        
+  <button ng-disabled="onSending" type="submit" class="btn btn-primary btn-lg btn-block btn-info">Send <span class="glyphicon glyphicon-send"></span></button>
 </div>
-<form name="sendMail" ng-submit="sendMail(sendMail.$valid)" class="form-horizontal" novalidate>
-    <div class="form-group" ng-class="{ 'has-error' : sendMail.email.$invalid && !sendMail.email.$pristine }">
-      <label for="emailFrom" class="col-lg-2 control-label">Email</label>
-      <div class="col-lg-10">
-        <input type="email" name="email" ng-model="email" class="form-control" id="emailFrom" placeholder="your@email.nu" ng-model="user.email" required>
-        <p ng-show="sendMail.email.$invalid && !sendMail.email.$pristine" class="help-block">Enter a valid email.</p>
-      </div>
-    </div>
-     <div class="form-group" ng-class="{ 'has-error' : sendMail.model.$invalid && !sendMail.model.$pristine }">
-      <label for="model" class="col-lg-2 control-label">Device model</label>
-      <div class="col-lg-10">
-        <input type="text" name="model" class="form-control" ng-model="user.model" ng-minlength="6" ng-maxlength="20" required>
-        <p ng-show="sendMail.model.$error.minlength" class="help-block">Device model is too short.</p>
-        <p ng-show="sendMail.model.$error.maxlength" class="help-block">Device model is too long.</p>
-      </div>
-    </div>
-    <div class="form-group">
-      <div class="col-lg-10 col-lg-offset-2">
-        <button class="btn btn-primary btn-lg btn-block btn-primary" type="submit">Send  
-        <span class="glyphicon glyphicon-send" aria-hidden="true"></span></button>
-      </div>
-    </div>
-</form>
-
       <!-- CSV DOWNLOAD BUTTON
-      <button class="btn btn-primary btn-lg btn-block btn-primary" ng-csv="getArray" filename="motionData.csv" csv-header="getHeader()" field-separator=","><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> Done, go to next test</button>-->
+      <button ng-csv="getArray" filename="motionData.csv" field-separator=","></button>-->
+
+  <!-- show our formData as it is being typed -->
+<pre>
+  <strong>You are sending:</strong>
+  <table class="table table table-hover ">
+    <tr>
+      <th class="col-lg-1 control-label">Your email</th>
+      <td class="col-lg-10">{{ formData.email }}</td>
+    </tr>
+    <tr>
+      <th>Type</th>
+      <td>{{ formData.type }}</td>
+    </tr>
+    <tr>
+      <th>Model</th>
+      <td>{{ formData.name }}</td>
+    </tr>
+    <tr ng-class="{ 'text-success': isRecDone }">
+      <th>Test done?</th>
+      <td>{{isRecDone}}</td>
+    </tr>
+</table> 
+</pre>

@@ -1,41 +1,19 @@
+body{background-color: #F3F3F3;}
+pre { margin:20px; background-color: #FFF;}
 
-.ng-view {
-	padding-bottom:30px; 
-}
 .panel-footer{
 	text-align: right;
 }
 
-.navbar .navbar-collapse {
-  text-align: center;
-}
-
-.btn-group .btn-group-justified-lg{
-	padding-bottom:30px;
-	text-align: center;
-}
-
 /* BASIC STYLINGS
 ============================================================================= */
-pre                             { margin-bottom:20px; }
-
 /* form styling */
-#form-container                { background:#F3F3F3; }
-#form-container .page-header   { margin:0; padding:10px;}
-
-/* numbered buttons */
-#status-buttons                 {  }
-#status-buttons a               { color:#000; display:inline-block; font-size:12px; margin-right:10px; text-align:center; text-transform:uppercase; }
-#status-buttons a:hover         { text-decoration:none; }
-#status-buttons span            { background:#FAFAFA; display:block; height:30px; margin:0 auto 10px; padding-top:5px; width:30px; 
-    border-radius:50%; }
-
-/* active buttons */
-#status-buttons a.active span   { background:#dd4814; color:#FFF;}
+#form-container                { background:#F3F3F3; margin-bottom:20px;}
+#form-container .page-header   { background:#FAFAFA; margin:0; padding:10px;}
 
 /* ANIMATION STYLINGS
 ============================================================================= */
-#signup-form            { position:relative; min-height:300px; overflow:hidden;}
+#test-form            { position:relative; min-height:300px; overflow:hidden; padding:10px;}
 
 /* basic styling for entering and leaving */
 /* left and right added to ensure full width */

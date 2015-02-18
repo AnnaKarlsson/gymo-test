@@ -1,0 +1,34 @@
+<fieldset>
+
+<!-- Type -->
+<label class="col-lg-2 control-label">Is this a {{ deviceType }}?</label>
+<div class="form-group" ng-class="{ 'has-error' : userForm.type.$invalid && !userForm.type.$pristine }">
+  <div class="col-lg-10">
+    <p ng-show="userForm.type.$invalid && !userForm.type.$pristine" class="help-block">Choose</p>
+    <div class="radio">
+      <label><input type="radio" name="type" value="{{deviceType}}" ng-model="formData.type" required>Yes</label>
+    </div>
+    <div  class="radio">
+      <label><input type="radio" name="type" value="enter correct type" ng-model="formData.type">No  </label>
+      <input  ng-show="formData.type == 'enter correct type'" placeholder="enter correct type" type="text" ng-model="formData.type" name="name_other"/>
+    </div>
+  </div>
+</div>
+
+<!-- Device name -->
+<label  class="col-lg-2 control-label">Is this a {{ deviceName }}?</label>
+<div class="form-group "  ng-class="{ 'has-error' : userForm.name.$invalid && !userForm.name.$pristine }">
+  <div class="col-lg-10">
+    <p ng-show="userForm.name.$invalid && !userForm.name.$pristine" class="help-block">Choose</p>
+    <div class="radio">
+      <label><input type="radio" name="name" value="{{deviceName}}" ng-model="formData.name" required>Yes</label>
+    </div>
+	<div class="radio">
+      <label><input type="radio" value="enter correct device" ng-model="formData.name" name="name" />No </label>
+      <input  ng-show="formData.name == 'enter correct device'" placeholder="enter correct device" type="text" ng-model="formData.name" name="name_other"/>
+	</div>
+  </div>
+</div>
+
+</fieldset>
+
