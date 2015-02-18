@@ -72,8 +72,8 @@ angular.module('TestCtrl', ['ngSanitize', 'ngCsv'])
         $scope.measurementsMotion.push({'a': nX, 'b': nY, 'c': nZ});
         $scope.measurementsGyro.push({'a': nA, 'b': nB, 'c': nG});
       }
-      gyroString += nA+','+nB+','+nG+'<br>';
-      motionString += nX+','+nY+','+nZ+'<br>';
+      gyroString += nA+','+nB+','+nG+'\n';
+      motionString += nX+','+nY+','+nZ+'\n';
       mytimeout = $timeout($scope.onCountdown,measureIntervall);
     }else{
       console.log('in else... : '+$scope.recBtnTxt)
@@ -111,12 +111,11 @@ angular.module('TestCtrl', ['ngSanitize', 'ngCsv'])
   $scope.sendMail = function(isValid){
     $scope.onSending = true;
     if($scope.isRecDone && isValid){
-      console.log('gyrostring: '+gyroString);
       var mail = {
         emailFrom : $scope.formData.email,
         model : $scope.deviceType+': '+$scope.deviceName,
-        gyro : 'alpha,beta,gamma<br>'+gyroString,
-        motion : 'x,y,z<br>'+motionString
+        gyro : 'alpha,beta,gamma\n'+gyroString,
+        motion : 'x,y,z\n'+motionString
       }
       var res = $http.post('/send', mail);
       res.success(function(data, status, headers, config) {
@@ -171,3 +170,4 @@ function isStill(){
     return false;
   }
 }
+

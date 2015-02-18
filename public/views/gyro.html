@@ -1,8 +1,9 @@
-<div ng-hide="!isRecDone" class="ng-hide">
+<div align="center "ng-hide="!isRecDone" class="ng-hide">
       <!-- CSV DOWNLOAD BUTTON
       <button class="btn btn-primary btn-lg btn-block btn-primary" ng-csv="getArray" filename="motionData.csv" csv-header="getHeader()" field-separator=","><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> Done, go to next test</button>-->
   <h3>DONE! Device is recorded</h3>
-  <button type="button" class="btn btn-primary btn-lg btn-block btn-primary" ui-sref="form.send" >Go to send <span class="glyphicon glyphicon-right-arrow" aria-hidden="true"></span></button>
+
+  <button type="button" class="btn btn-primary btn-lg btn-block btn-primary" ui-sref="form.info" > Go to device-info <span class="glyphicon glyphicon-arrow go to" aria-hidden="true"></span></button>
 </div>
 <div ng-hide="isRecDone">
   <button type="button" class="btn btn-primary btn-lg btn-block btn-primary" ng-click="record()" ng-disabled="isDisabled" ng-model="isDisabled"><span class="glyphicon glyphicon-record" aria-hidden="true"></span> {{recBtnTxt}}</button>
