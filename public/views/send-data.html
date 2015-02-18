@@ -6,6 +6,12 @@
     <input type="email" name="email" class="form-control" ng-model="formData.email" placeholder="your@email.nu" required>
     <p ng-show="userForm.email.$invalid && !userForm.email.$pristine" class="help-block">Enter a valid email.</p>
   </div>
+  <!-- CC -->
+  <div class="form-group">
+    <label class="checkbox-inline">
+      <input type="checkbox" name="cc" ng-model="formData.cc"> I wan't you to send my testdata to me.
+    </label>
+  </div>
         
   <button ng-disabled="onSending" type="submit" class="btn btn-primary btn-lg btn-block btn-info">Send <span class="glyphicon glyphicon-send"></span></button>
 </div>
@@ -15,22 +21,7 @@
   <!-- show our formData as it is being typed -->
 <pre>
   <strong>You are sending:</strong>
-  <table class="table table table-hover ">
-    <tr>
-      <th class="col-lg-1 control-label">Your email</th>
-      <td class="col-lg-10">{{ formData.email }}</td>
-    </tr>
-    <tr>
-      <th>Type</th>
-      <td>{{ formData.type }}</td>
-    </tr>
-    <tr>
-      <th>Model</th>
-      <td>{{ formData.name }}</td>
-    </tr>
-    <tr ng-class="{ 'text-success': isRecDone }">
-      <th>Test done?</th>
-      <td>{{isRecDone}}</td>
-    </tr>
-</table> 
+  Mail to me <span ng-show="formData.cc">and {{ formData.email }}</span><hr>
+  <span ng-show="isRecDone">With testdata on a {{ formData.type }} with model {{ formData.name }}</span>
+
 </pre>

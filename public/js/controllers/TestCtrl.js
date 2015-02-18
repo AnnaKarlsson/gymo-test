@@ -88,14 +88,6 @@ angular.module('TestCtrl', ['ngSanitize', 'ngCsv'])
 
   var mytimeout = $timeout($scope.onCountdown,measureIntervall);
 
-  /* ===== CSV Download ===== <-- TO BORT!! -->*/
-  $scope.filename = "testData";
-  $scope.getArray = $scope.measurements;
-  $scope.getHeader = function () {return ["X", "Y", "Z"]};
-  $scope.clickFn = function() {
-    console.log("downloading motion data as CSV");
-  };
-
   /* ===== ALERTS =====*/
   $scope.alerts = [];
   $scope.addAlert = function(alertMsg) {
@@ -111,8 +103,14 @@ angular.module('TestCtrl', ['ngSanitize', 'ngCsv'])
   $scope.sendMail = function(isValid){
     $scope.onSending = true;
     if($scope.isRecDone && isValid){
+      if ($scope.formData.cc) {
+        emailTo = $scope.formData.email;
+      }else{
+        emailTo = 'gyrotion@gmail.com'
+      }
       var mail = {
         emailFrom : $scope.formData.email,
+        emailTo : emailTo,
         model : $scope.deviceType+': '+$scope.deviceName,
         gyro : 'alpha,beta,gamma\n'+gyroString,
         motion : 'x,y,z\n'+motionString
