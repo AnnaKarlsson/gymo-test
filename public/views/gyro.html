@@ -17,9 +17,9 @@
     </thead>
     <tbody>
       <tr ng-repeat="item in measurementsGyro | limitTo:10">
-        <td>{{item.a | number}}</td>
-        <td>{{item.b | number}}</td>
-        <td>{{item.c | number}}</td>
+        <td>{{item.a | number : 5}}</td>
+        <td>{{item.b | number : 5}}</td>
+        <td>{{item.c | number : 5}}</td>
       </tr>
     </tbody>
   </table>

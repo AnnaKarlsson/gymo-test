@@ -16,7 +16,7 @@ angular.module('gymoApp', ['ngAnimate', 'ui.router','TestCtrl', 'CompassCtrl'])
             controller: 'formController'
         })
 
-        .state('compass', {
+        .state('form.compass', {
             url: '/compass',
             templateUrl: 'views/compass.html',
             controller: 'CompassController'

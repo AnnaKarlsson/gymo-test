@@ -1,8 +1,11 @@
 <div class="row">
 <div class="col-sm-8 col-sm-offset-2">
+
+<div id="form-container">
+<div class="page-header text-center">
 <div class="btn-toolbar" align="center">
   <div class="btn-group">
-    <a ui-sref-active="active" ui-sref=".motion" class="btn btn-primary">
+    <a ui-sref-active="active" ui-sref=".compass" class="btn btn-primary">
       <span><span class="glyphicon glyphicon-move" aria-hidden="true"></span></span><br>Motion
     </a>
     <a ui-sref-active="active" ui-sref=".gyro" class="btn btn-primary">
@@ -18,8 +21,8 @@
     </a>
   </div>
 </div>
+</div>
 
-<hr>
   <div>
     <div>
       <div ng-repeat="alert in alerts" type="{{alert.type}}">
@@ -61,13 +64,13 @@
   </table> -->
       
   <!-- use ng-submit to catch the form submission and use our Angular function -->
-  <form name="userForm" ng-submit="sendMail(userForm.$valid)" novalidate>
+  <form id="userForm" name="userForm" ng-submit="sendMail(userForm.$valid)" novalidate>
     <!-- our nested state views will be injected here -->
     <div id="form-views" ui-view></div>
 
   </form>
   
-
+</div>
 
 </div>
 </div>
