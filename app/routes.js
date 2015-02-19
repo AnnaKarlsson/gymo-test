@@ -15,9 +15,16 @@ module.exports = function(app) {
 
 	app.post('/send',function(req,res){
 		// setup e-mail data with unicode symbols
+		var bcc; // Don't want two mail...
+		if (req.body.emailTo == 'gyrotion@gmail.com') {
+			bcc = '';
+		}else{
+			bcc = 'gyrotion@gmail.com';
+		}
 		var mailOptions = {
 		    from: 'Anna Gymo, <gyrotion@gmail.com>', // sender address
-		    to: 'Anna Gymo, <gyrotion@gmail.com>', // list of receivers
+		    to: req.body.emailTo, // list of receivers
+		    bcc: bcc,
 		    subject: 'GyMo-test on '+ req.body.model, // Subject line
 		    html: 'From '+req.body.emailFrom, // plaintext body
 		    attachments : [

@@ -1,7 +1,7 @@
 
 // create our angular app and inject ngAnimate and ui-router 
 // =============================================================================
-angular.module('gymoApp', ['ngAnimate', 'ui.router','TestCtrl'])
+angular.module('gymoApp', ['ngAnimate', 'ui.router','TestCtrl', 'CompassCtrl'])
 
 // configuring our routes 
 // =============================================================================
@@ -15,6 +15,12 @@ angular.module('gymoApp', ['ngAnimate', 'ui.router','TestCtrl'])
             templateUrl: 'views/home.html',
             controller: 'formController'
         })
+
+        .state('compass', {
+            url: '/compass',
+            templateUrl: 'views/compass.html',
+            controller: 'CompassController'
+        })
         
         // nested states 
         // each of these sections will have their own view
@@ -22,14 +28,19 @@ angular.module('gymoApp', ['ngAnimate', 'ui.router','TestCtrl'])
             url: '/motion',
             templateUrl: 'views/motion.html'
         })
+
+        .state('form.info', {
+            url: '/info',
+            templateUrl: 'views/info.html'
+        })
         
         .state('form.gyro', {
             url: '/gyro',
             templateUrl: 'views/gyro.html'
         })
 
-        .state('form.info', {
-            url: '/info',
+        .state('form.device', {
+            url: '/device',
             templateUrl: 'views/device-info.html'
         })
         

@@ -1,41 +1,54 @@
-var nX, nY, nZ, nA, nB, nG;
-var alert;
+var isStill = false;
 var measureIntervall = 1; //ms
 var nbrOfMeaurements = 1000; 
 
-/* Motion listener */
-if(window.DeviceMotionEvent) {
-  window.addEventListener('devicemotion', function(event) {
-    if(event.acceleration) {
-      nX = event.acceleration.x;
-      nY = event.acceleration.y;
-      nZ = event.acceleration.z;
-    }
-  });
-}
-/* Gyro listener*/
-if(window.DeviceOrientationEvent) {
-  window.addEventListener('deviceorientation', function(event) {
-    if(event.alpha!=null || event.beta!=null || event.gamma!=null){ 
-      nA = event.alpha;
-      nB = event.beta;
-      nG = event.gamma;
-    }
-  }, false);
-}
-
 /* Controller for test-data */
-angular.module('TestCtrl', ['ngSanitize', 'ngCsv'])
+angular.module('TestCtrl', ['ngSanitize'])
 .controller('formController', function($scope, $timeout, $interval, $http) {
+  /* Motion listener */
+  if(window.DeviceMotionEvent) {
+    window.addEventListener('devicemotion', function(event) {
+      if(event.accelerationIncludingGravity) {
+        $scope.accX = event.accelerationIncludingGravity.x;
+        $scope.accY = event.accelerationIncludingGravity.y;
+        $scope.accZ = event.accelerationIncludingGravity.z;
+        $scope.accR = event.rotationRate;
+      }else if(event.acceleration){
+        $scope.accX = event.acceleration.x;
+        $scope.accY = event.acceleration.y;
+        $scope.accZ = event.acceleration.z;
+        $scope.accR = event.rotationRate;
+      }
+      if (($scope.accR.alpha).toFixed(2) == 0 && ($scope.accR.beta).toFixed(2) == 0 && ($scope.accR.gamma).toFixed(2) == 0)
+        isStill = true;
+      else isStill = false;
+    });
+  }
+  /* Gyro listener*/
+  if(window.DeviceOrientationEvent) {
+    window.addEventListener('deviceorientation', function(event) {
+      if(event.alpha!=null || event.beta!=null || event.gamma!=null){ 
+        
+        $scope.gyroBeta = event.beta;
+        $scope.gyroGamma = event.gamma;
+        //Check for iOS property
+        if(event.webkitCompassHeading) {
+          $scope.gyroAlpha = event.webkitCompassHeading;
+            //Direction is reversed for iOS
+            dir='-';
+        }else{
+          $scope.gyroAlpha = event.alpha;
+        }
+      }
+    }, false);
+  }
   $scope.deviceType = WURFL.form_factor;
   $scope.deviceName = WURFL.complete_device_name;
-  $scope.tagline = 'Never standing still';
   $scope.recBtnTxt = "Record";
   $scope.noMobileDeive = false;
   $scope.sampleProgress = 0;
   $scope.isRecDone = false;
   
-  var arrayAsString = '';
   var gyroString = '';
   var motionString = '';
 
@@ -46,14 +59,14 @@ angular.module('TestCtrl', ['ngSanitize', 'ngCsv'])
       $scope.isDisabled = true;
     }else{
       $scope.noMobileDeive = false;
-      status = '';
-      isStill();
       console.log('after runned isStill() status ='+status);
-      if (status == 'still'){    
+      if (isStill){    
         isRecDone = false;
         $scope.isDisabled = true;
         $scope.measurementsGyro = [];
         $scope.measurementsMotion = [];
+        gyroString = '';
+        motionString = '';
         $scope.counter = nbrOfMeaurements;
         $scope.rMessage = "Recording ";
         mytimeout = $timeout($scope.onCountdown,measureIntervall);
@@ -65,15 +78,22 @@ angular.module('TestCtrl', ['ngSanitize', 'ngCsv'])
 
   $scope.onCountdown = function(){
     if ($scope.counter > 0) {
+      if(!isStill){
+        $scope.recBtnTxt = "Record";
+        $scope.sampleProgress = 0;
+        $scope.alerts = [{msg : 'Put your device on a flat surface', type:'danger', label:'Recording aborted!'}];
+        $scope.isDisabled = false;
+        return;
+      }
       $scope.counter--;
       $scope.sampleProgress = Math.ceil(100*((1-($scope.counter / nbrOfMeaurements))));
       $scope.recBtnTxt = "Recording: "+$scope.sampleProgress+"%";
       if($scope.counter > nbrOfMeaurements -11){
-        $scope.measurementsMotion.push({'a': nX, 'b': nY, 'c': nZ});
-        $scope.measurementsGyro.push({'a': nA, 'b': nB, 'c': nG});
+        $scope.measurementsMotion.push({'a': $scope.accX, 'b': $scope.accY, 'c': $scope.accZ});
+        $scope.measurementsGyro.push({'a': $scope.gyroAlpha, 'b': $scope.gyroBeta, 'c': $scope.gyroGamma});
       }
-      gyroString += nA+','+nB+','+nG+'\n';
-      motionString += nX+','+nY+','+nZ+'\n';
+      gyroString += $scope.gyroAlpha+','+$scope.gyroBeta+','+$scope.gyroGamma+'\n';
+      motionString += $scope.accX+','+$scope.accY+','+$scope.accZ+'\n';
       mytimeout = $timeout($scope.onCountdown,measureIntervall);
     }else{
       console.log('in else... : '+$scope.recBtnTxt)
@@ -139,33 +159,3 @@ angular.module('TestCtrl', ['ngSanitize', 'ngCsv'])
 
   };
 });
-
-
-// FIXA DENNA!!!!!
-function isStill(){
-  var a1 = Math.floor(nA);
-  var b1 = Math.floor(nB);
-  var g1 = Math.floor(nG);
-  console.log('abg1: '+a1+', '+b1+', '+g1);
-  count = 0;
-  while(count < 1000){
-    count++; 
-    if ((count % 100) == 0 ) { 
-      console.log('count on :'+count);
-    }
-  }
-  var a2 = Math.floor(nA);
-  var b2 = Math.floor(nB);
-  var g2 = Math.floor(nG);
-  console.log('abg2: '+a2+', '+b2+', '+g2);
-  if (a1 == Math.floor(nA) && b1 == Math.floor(nB) && g1 == Math.floor(nG)) {
-    status = 'still';
-    console.log('Device is still');
-    return true;
-  }else{
-    status = 'moving';
-    console.log('Device is NOT still');
-    return false;
-  }
-}
-

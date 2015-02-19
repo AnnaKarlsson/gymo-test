@@ -1,15 +1,11 @@
 <div align="center" ng-hide="!isRecDone" class="ng-hide">
   <h3>DONE! Device is recorded</h3>
-  Check out 
-  <button type="button" class="btn btn-primary btn-lg btn btn-info" ui-sref="form.gyro" >Gyro-data <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button>
-  or
-  <button type="button" class="btn btn-primary btn-lg btn btn-primary" ui-sref="form.info" >Device-info <span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span></button>
+  <p>Check out <a ui-sref="form.gyro" >gyro-data</a> or fill in <a ui-sref="form.device" >device-info</a> before sending.</p>
   
 </div>
 <div ng-hide="isRecDone">
   <button type="button" class="btn btn-primary btn-lg btn-block btn-primary" ng-click="record()" ng-disabled="isDisabled" ng-model="isDisabled"><span class="glyphicon glyphicon-record" aria-hidden="true"></span> {{recBtnTxt}}</button>
 </div>
-
 <div class="table-responsive">
   <h3 class="text-center">First 10 samples:</h3>
   <!-- TABLE -->

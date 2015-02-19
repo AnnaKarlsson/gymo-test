@@ -1,8 +1,23 @@
-body{background-color: #F3F3F3;}
+body{background-color: #F3F3F3; padding: 5px;}
 pre { margin:20px; background-color: #FFF;}
 
-.panel-footer{
-	text-align: right;
+#footer {
+   text-align: right;
+   position:fixed;
+   left:0px;
+   padding-right:5px;
+   bottom:20px;
+   height:40px;
+   width:100%;
+}
+#compass{
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    transform-origin: 50% 50%;
+    -webkit-transform-origin: 50% 50%;
+    -moz-transform-origin: 50% 50%;
 }
 
 /* BASIC STYLINGS
