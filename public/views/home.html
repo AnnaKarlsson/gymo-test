@@ -5,22 +5,24 @@
 <div class="page-header text-center">
 <div class="btn-toolbar" align="center">
   <div class="btn-group">
-    <a ui-sref-active="active" ui-sref=".compass" class="btn btn-primary">
-      <span><span class="glyphicon glyphicon-move" aria-hidden="true"></span></span><br>Motion
+    <a ui-sref-active="active" ui-sref=".motion" class="btn btn-success">
+      SAMPLE<br><span><i class="fa fa-bar-chart fa-lg"></i></span><br>Record
     </a>
-    <a ui-sref-active="active" ui-sref=".gyro" class="btn btn-primary">
-      <span><span class="glyphicon glyphicon-cd" aria-hidden="true"></span></span><br>Gyro
-    </a>
-    <a ui-sref-active="active" ui-sref=".device" class="btn btn-primary" ng-disabled="!isRecDone">
-      <span><span class="glyphicon glyphicon-phone" aria-hidden="true"></span><br>Device
+    <a ui-sref-active="active" ui-sref=".send" class="btn btn-success">
+      SEND<br><span><i class="fa fa-paper-plane fa-lg"></i></span><br>Sample
     </a>
   </div>
-  <div class="btn-group pull-right" ng-hide="!isRecDone">
-    <a ui-sref-active="active" ui-sref=".send" class="btn btn-info">
-      <span><span class="glyphicon glyphicon-send" aria-hidden="true"></span><br>Send
+  <div class="btn-group pull-right" ng-disabled="isRecDone">
+    <a ui-sref-active="active" ui-sref=".compass" class="btn btn-info">
+      DEMO<br><span><i class="fa fa-compass fa-lg"></i></span><br>Gyro
+    </a>
+    <a ui-sref-active="active" ui-sref=".live" class="btn btn-info">
+      DATA<br><span><i class="fa fa-arrows fa-lg"></i></span><br>Motion
     </a>
   </div>
 </div>
+<br>
+<div><p><strong>{{deviceType}}: </stong><i>{{deviceName}}</i></p></div>
 </div>
 
   <div>
@@ -34,34 +36,6 @@
       </div>
     </div>
 	</div>
-
-  <!-- DEVELOP DATA TO BE REMOVED LATER
-  <table class="table table-hover ">
-    <thead>
-      <tr>
-        <th>Motion</th>
-        <th>Rotation</th>
-        <th>Orientation</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>X: {{accX}}</td>
-        <td>Alpha: {{accR.alpha}}</td>
-        <td>Alpha: {{gyroAlpha}}</td>
-      </tr>
-      <tr>
-        <td>Y: {{accY}} </td>
-        <td>Beta: {{accR.beta}} </td>
-        <td>Beta: {{gyroBeta}} </td>
-      </tr>
-      <tr>
-        <td>Z: {{accZ}} </td>
-        <td>Gamma: {{accR.gamma}} </td>
-        <td>Gamma: {{gyroGamma}} </td>
-      </tr>
-    </tbody>
-  </table> -->
       
   <!-- use ng-submit to catch the form submission and use our Angular function -->
   <form id="userForm" name="userForm" ng-submit="sendMail(userForm.$valid)" novalidate>

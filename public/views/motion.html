@@ -1,10 +1,10 @@
 <div align="center" ng-hide="!isRecDone" class="ng-hide">
-  <h3>DONE! Device is recorded</h3>
-  <p>Check out <a ui-sref="form.gyro" >gyro-data</a> or fill in <a ui-sref="form.device" >device-info</a> before sending.</p>
+  <h3>DONE!</h3>
+  <p>Device is recorded and ready to <a ui-sref="form.send" >send</a> to me</p>
   
 </div>
 <div ng-hide="isRecDone">
-  <button type="button" class="btn btn-primary btn-lg btn-block btn-primary" ng-click="record()" ng-disabled="isDisabled" ng-model="isDisabled"><span class="glyphicon glyphicon-record" aria-hidden="true"></span> {{recBtnTxt}}</button>
+  <button type="button" class="btn btn-primary btn-lg btn-block btn-danger" ng-click="record()" ng-disabled="isDisabled" ng-model="isDisabled"><span class="glyphicon glyphicon-record" aria-hidden="true"></span> {{recBtnTxt}}</button>
 </div>
 <div class="table-responsive">
   <h3 class="text-center">First 10 samples:</h3>
@@ -14,12 +14,18 @@
       <th>X</th>
       <th>Y</th>
       <th>Z</th>
+      <th>Alpha</th>
+      <th>Beta</th>
+      <th>Gamma</th>
     </thead>
     <tbody>
-      <tr ng-repeat="item in measurementsMotion | limitTo:10">
+      <tr ng-repeat="item in measurements | limitTo:10">
+        <td>{{item.x | number}}</td>
+        <td>{{item.y | number}}</td>
+        <td>{{item.z | number}}</td>
         <td>{{item.a | number}}</td>
         <td>{{item.b | number}}</td>
-        <td>{{item.c | number}}</td>
+        <td>{{item.g | number}}</td>
       </tr>
     </tbody>
   </table>

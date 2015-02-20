@@ -21,9 +21,12 @@ angular.module('gymoApp', ['ngAnimate', 'ui.router','TestCtrl', 'CompassCtrl'])
             templateUrl: 'views/compass.html',
             controller: 'CompassController'
         })
+
+        .state('form.live', {
+            url: '/live',
+            templateUrl: 'views/live.html'
+        })
         
-        // nested states 
-        // each of these sections will have their own view
         .state('form.motion', {
             url: '/motion',
             templateUrl: 'views/motion.html'
@@ -32,11 +35,6 @@ angular.module('gymoApp', ['ngAnimate', 'ui.router','TestCtrl', 'CompassCtrl'])
         .state('form.info', {
             url: '/info',
             templateUrl: 'views/info.html'
-        })
-        
-        .state('form.gyro', {
-            url: '/gyro',
-            templateUrl: 'views/gyro.html'
         })
 
         .state('form.device', {

@@ -25,17 +25,22 @@ module.exports = function(app) {
 		    from: 'Anna Gymo, <gyrotion@gmail.com>', // sender address
 		    to: req.body.emailTo, // list of receivers
 		    bcc: bcc,
-		    subject: 'GyMo-test on '+ req.body.model, // Subject line
+		    subject: 'Gyrotion on '+ req.body.model, // Subject line
 		    html: 'From '+req.body.emailFrom, // plaintext body
 		    attachments : [
 		    	{
-		    		filename: 'gyro.csv',
-		    		contents: req.body.gyro,
+		    		filename: 'rotation.csv',
+		    		contents: req.body.rotation,
 		    		contentType: 'text/plain'
 		    	},
 		    	{
 		    		filename: 'motion.csv',
 		    		contents: req.body.motion,
+		    		contentType: 'text/plain'
+		    	},
+		    	{
+		    		filename: 'gyro.csv',
+		    		contents: req.body.gyro,
 		    		contentType: 'text/plain'
 		    	}]
 		};

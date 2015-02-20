@@ -5,6 +5,15 @@ var nbrOfMeaurements = 1000;
 /* Controller for test-data */
 angular.module('TestCtrl', ['ngSanitize'])
 .controller('formController', function($scope, $timeout, $interval, $http) {
+  $scope.deviceType = WURFL.form_factor;
+  $scope.deviceName = WURFL.complete_device_name;
+  $scope.recBtnTxt = "Record";
+  $scope.noMobileDeive = false;
+  $scope.sampleProgress = 0;
+  $scope.isRecDone = false;
+  var gyroString = '';
+  var motionString = '';
+
   /* Motion listener */
   if(window.DeviceMotionEvent) {
     window.addEventListener('devicemotion', function(event) {
@@ -16,7 +25,7 @@ angular.module('TestCtrl', ['ngSanitize'])
       }else if(event.acceleration){
         $scope.accX = event.acceleration.x;
         $scope.accY = event.acceleration.y;
-        $scope.accZ = event.acceleration.z;
+        $scope.accZ = event.acceleration.z; 
         $scope.accR = event.rotationRate;
       }
       if (($scope.accR.alpha).toFixed(2) == 0 && ($scope.accR.beta).toFixed(2) == 0 && ($scope.accR.gamma).toFixed(2) == 0)
@@ -24,7 +33,7 @@ angular.module('TestCtrl', ['ngSanitize'])
       else isStill = false;
     });
   }
-  /* Gyro listener*/
+    /* Gyro listener*/
   if(window.DeviceOrientationEvent) {
     window.addEventListener('deviceorientation', function(event) {
       if(event.alpha!=null || event.beta!=null || event.gamma!=null){ 
@@ -42,15 +51,8 @@ angular.module('TestCtrl', ['ngSanitize'])
       }
     }, false);
   }
-  $scope.deviceType = WURFL.form_factor;
-  $scope.deviceName = WURFL.complete_device_name;
-  $scope.recBtnTxt = "Record";
-  $scope.noMobileDeive = false;
-  $scope.sampleProgress = 0;
-  $scope.isRecDone = false;
   
-  var gyroString = '';
-  var motionString = '';
+
 
   /* ===== RECORD ====== */
   $scope.record= function(){
@@ -63,9 +65,9 @@ angular.module('TestCtrl', ['ngSanitize'])
       if (isStill){    
         isRecDone = false;
         $scope.isDisabled = true;
-        $scope.measurementsGyro = [];
-        $scope.measurementsMotion = [];
+        $scope.measurements = [];
         gyroString = '';
+        rotationString = '';
         motionString = '';
         $scope.counter = nbrOfMeaurements;
         $scope.rMessage = "Recording ";
@@ -89,10 +91,17 @@ angular.module('TestCtrl', ['ngSanitize'])
       $scope.sampleProgress = Math.ceil(100*((1-($scope.counter / nbrOfMeaurements))));
       $scope.recBtnTxt = "Recording: "+$scope.sampleProgress+"%";
       if($scope.counter > nbrOfMeaurements -11){
-        $scope.measurementsMotion.push({'a': $scope.accX, 'b': $scope.accY, 'c': $scope.accZ});
-        $scope.measurementsGyro.push({'a': $scope.gyroAlpha, 'b': $scope.gyroBeta, 'c': $scope.gyroGamma});
+        $scope.measurements.push({
+          'x': $scope.accX, 
+          'y': $scope.accY, 
+          'z': $scope.accZ,
+          'a': $scope.gyroAlpha,
+          'b': $scope.gyroBeta,
+          'g': $scope.gyroGamma
+        });
       }
       gyroString += $scope.gyroAlpha+','+$scope.gyroBeta+','+$scope.gyroGamma+'\n';
+      rotationString += $scope.accR.alpha+','+$scope.accR.beta+','+$scope.accR.gamma+'\n';
       motionString += $scope.accX+','+$scope.accY+','+$scope.accZ+'\n';
       mytimeout = $timeout($scope.onCountdown,measureIntervall);
     }else{
@@ -132,8 +141,9 @@ angular.module('TestCtrl', ['ngSanitize'])
         emailFrom : $scope.formData.email,
         emailTo : emailTo,
         model : $scope.deviceType+': '+$scope.deviceName,
-        gyro : 'alpha,beta,gamma\n'+gyroString,
-        motion : 'x,y,z\n'+motionString
+        rotation : 'alpha,beta,gamma\n'+ rotationString ,
+        motion : 'x,y,z\n'+motionString,
+        gyro : 'alpha,beta,gamma\n'+ gyroString
       }
       var res = $http.post('/send', mail);
       res.success(function(data, status, headers, config) {

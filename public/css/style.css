@@ -1,16 +1,41 @@
-body{background: #f5f5f5; background-repeat:repeat-x;}
+body{background: #f5f5f5;}
 pre { margin:20px; background-color: #FFF;}
+.dummy {
+    padding-top: 100%; /* forces 1:1 aspect ratio */
+}
+.responsive-container {
+    position: relative;
+    width: 100%;
+}
+.compass-container {
+  background-image: url('../img/compass.png'); 
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100% 100%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align:center; /* Align center inline elements */
+}
+.compass-container img {
+  vertical-align: middle;
+  display: inline-block;
+}
 
 #footer {
    text-align: right;
    position:fixed;
    left:0px;
    padding-right:5px;
+   padding-bottom: 5px;
    bottom:20px;
    height:40px;
    width:100%;
 }
 #compass{
+  position: center;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -22,10 +47,10 @@ pre { margin:20px; background-color: #FFF;}
 
 /* BASIC STYLINGS
 ============================================================================= */
-/* form styling */
-#thumb {background-image: url(img/arrow.png); background-repeat: no-repeat;}
-#userForm { position:relative; min-height:300px; overflow:hidden; padding:10px; }
-#form-container                { background:#fdfdfd; margin-bottom:20px;}
+/* form styling 
+#compassContainer1 { background-repeat: no-repeat; max-width: 100%; height: auto;}*/
+#userForm { position:relative; overflow:hidden; padding:10px; }
+#form-container                { min-height: 300px; background:#fdfdfd; margin-bottom:20px;}
 #form-container .page-header   { background:#f5f5f5; margin:0; padding:10px;}
 
 /* ANIMATION STYLINGS
