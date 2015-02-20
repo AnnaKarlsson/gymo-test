@@ -13,21 +13,23 @@ angular.module('TestCtrl', ['ngSanitize'])
   $scope.isRecDone = false;
   var gyroString = '';
   var motionString = '';
+  var accR, accX, accY, accZ;
 
   /* Motion listener */
   if(window.DeviceMotionEvent) {
     window.addEventListener('devicemotion', function(event) {
       if(event.accelerationIncludingGravity) {
-        $scope.accX = event.accelerationIncludingGravity.x;
-        $scope.accY = event.accelerationIncludingGravity.y;
-        $scope.accZ = event.accelerationIncludingGravity.z;
-        $scope.accR = event.rotationRate;
+        accX = event.accelerationIncludingGravity.x;
+        accY = event.accelerationIncludingGravity.y;
+        accZ = event.accelerationIncludingGravity.z;
+        accR = event.rotationRate;
       }else if(event.acceleration){
-        $scope.accX = event.acceleration.x;
-        $scope.accY = event.acceleration.y;
-        $scope.accZ = event.acceleration.z; 
-        $scope.accR = event.rotationRate;
+        accX = event.acceleration.x;
+        accY = event.acceleration.y;
+        accZ = event.acceleration.z; 
+        accR = event.rotationRate;
       }
+      $scope.motionUpdate(accX, accY, accZ, accR);
       if (($scope.accR.alpha).toFixed(2) == 0 && ($scope.accR.beta).toFixed(2) == 0 && ($scope.accR.gamma).toFixed(2) == 0)
         isStill = true;
       else isStill = false;
@@ -50,6 +52,13 @@ angular.module('TestCtrl', ['ngSanitize'])
         }
       }
     }, false);
+  }
+
+  $scope.motionUpdate = function(X, Y, Z, R){
+    $scope.accX = X;
+    $scope.accY = Y;
+    $scope.accZ = Z;
+    $scope.accR = R;
   }
   
 

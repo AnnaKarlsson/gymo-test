@@ -1,7 +1,7 @@
 
 // create our angular app and inject ngAnimate and ui-router 
 // =============================================================================
-angular.module('gymoApp', ['ngAnimate', 'ui.router','TestCtrl', 'CompassCtrl'])
+angular.module('gymoApp', ['ngAnimate', 'ui.router','TestCtrl', 'GyroCtrl'])
 
 // configuring our routes 
 // =============================================================================
@@ -16,30 +16,25 @@ angular.module('gymoApp', ['ngAnimate', 'ui.router','TestCtrl', 'CompassCtrl'])
             controller: 'formController'
         })
 
-        .state('form.compass', {
-            url: '/compass',
-            templateUrl: 'views/gyro.html',
+        .state('form.gyro', {
+            url: '/gyro',
+            templateUrl: 'views/live-gyro.html',
             controller: 'GyroController'
         })
 
-        .state('form.live', {
-            url: '/live',
-            templateUrl: 'views/live.html'
-        })
-        
         .state('form.motion', {
             url: '/motion',
-            templateUrl: 'views/motion.html'
+            templateUrl: 'views/live-motion.html'
+        })
+        
+        .state('form.record', {
+            url: '/record',
+            templateUrl: 'views/record.html'
         })
 
-        .state('form.info', {
-            url: '/info',
-            templateUrl: 'views/info.html'
-        })
-
-        .state('form.device', {
-            url: '/device',
-            templateUrl: 'views/device-info.html'
+        .state('form.about', {
+            url: '/about',
+            templateUrl: 'views/about.html'
         })
         
         // url will be /form/payment
@@ -50,5 +45,5 @@ angular.module('gymoApp', ['ngAnimate', 'ui.router','TestCtrl', 'CompassCtrl'])
        
     // catch all route
     // send users to the form page 
-    $urlRouterProvider.otherwise('/form/motion');
+    $urlRouterProvider.otherwise('/form/record');
 })
