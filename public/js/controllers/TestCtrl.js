@@ -1,19 +1,17 @@
-var isStill = false;
-var measureIntervall = 1; //ms
-var nbrOfMeaurements = 1000; 
-
 /* Controller for test-data */
 angular.module('TestCtrl', ['ngSanitize'])
 .controller('formController', function($scope, $timeout, $interval, $http) {
   $scope.deviceType = WURFL.form_factor;
   $scope.deviceName = WURFL.complete_device_name;
   $scope.recBtnTxt = "Record";
-  $scope.noMobileDeive = false;
   $scope.sampleProgress = 0;
   $scope.isRecDone = false;
   var gyroString = '';
   var motionString = '';
   var accR, accX, accY, accZ;
+  var isStill = true;
+  var measureIntervall = 1; //ms
+  var nbrOfMeaurements = 1000; 
 
   /* Motion listener */
   if(window.DeviceMotionEvent) {
@@ -30,26 +28,21 @@ angular.module('TestCtrl', ['ngSanitize'])
         accR = event.rotationRate;
       }
       $scope.motionUpdate(accX, accY, accZ, accR);
-      if (($scope.accR.alpha).toFixed(2) == 0 && ($scope.accR.beta).toFixed(2) == 0 && ($scope.accR.gamma).toFixed(2) == 0)
+      if (($scope.accR.alpha).toFixed(2) == 0 && ($scope.accR.beta).toFixed(2) == 0 && ($scope.accR.gamma).toFixed(2) == 0){
         isStill = true;
-      else isStill = false;
+      }
+      else if(accZ < -8 && Math.abs(accX) < 0.1 && Math.abs(accY) < 0.3){
+        isStill = true;
+      }else isStill = false;
     });
   }
     /* Gyro listener*/
   if(window.DeviceOrientationEvent) {
     window.addEventListener('deviceorientation', function(event) {
-      if(event.alpha!=null || event.beta!=null || event.gamma!=null){ 
-        
+      if(event.alpha!=null || event.beta!=null || event.gamma!=null){        
         $scope.gyroBeta = event.beta;
         $scope.gyroGamma = event.gamma;
-        //Check for iOS property
-        if(event.webkitCompassHeading) {
-          $scope.gyroAlpha = event.webkitCompassHeading;
-            //Direction is reversed for iOS
-            dir='-';
-        }else{
-          $scope.gyroAlpha = event.alpha;
-        }
+        $scope.gyroAlpha = event.alpha;
       }
     }, false);
   }
@@ -69,15 +62,16 @@ angular.module('TestCtrl', ['ngSanitize'])
       $scope.alerts = [ {msg : 'This device is not support motion', type:'info', label:'Sorry,'}];
       $scope.isDisabled = true;
     }else{
-      $scope.noMobileDeive = false;
       console.log('after runned isStill() status ='+status);
       if (isStill){    
         isRecDone = false;
         $scope.isDisabled = true;
         $scope.measurements = [];
-        gyroString = '';
-        rotationString = '';
-        motionString = '';
+        gyroString = 'alpha,beta,gamma\n';
+        if(accR != undefined)
+          motionString = 'x,y,z,alpha,beta,gamma\n';
+        else
+          motionString = 'x,y,z\n';
         $scope.counter = nbrOfMeaurements;
         $scope.rMessage = "Recording ";
         mytimeout = $timeout($scope.onCountdown,measureIntervall);
@@ -100,18 +94,28 @@ angular.module('TestCtrl', ['ngSanitize'])
       $scope.sampleProgress = Math.ceil(100*((1-($scope.counter / nbrOfMeaurements))));
       $scope.recBtnTxt = "Recording: "+$scope.sampleProgress+"%";
       if($scope.counter > nbrOfMeaurements -11){
-        $scope.measurements.push({
-          'x': $scope.accX, 
-          'y': $scope.accY, 
-          'z': $scope.accZ,
-          'a': $scope.gyroAlpha,
-          'b': $scope.gyroBeta,
-          'g': $scope.gyroGamma
-        });
+        if($scope.gyroAlpha != undefined)
+          $scope.measurements.push({
+            'x': $scope.accX, 
+            'y': $scope.accY, 
+            'z': $scope.accZ,
+            'a': $scope.gyroAlpha,
+            'b': $scope.gyroBeta,
+            'g': $scope.gyroGamma
+          });
+        else{
+          $scope.measurements.push({
+            'x': $scope.accX, 
+            'y': $scope.accY, 
+            'z': $scope.accZ
+          });
+        }
       }
       gyroString += $scope.gyroAlpha+','+$scope.gyroBeta+','+$scope.gyroGamma+'\n';
-      rotationString += $scope.accR.alpha+','+$scope.accR.beta+','+$scope.accR.gamma+'\n';
-      motionString += $scope.accX+','+$scope.accY+','+$scope.accZ+'\n';
+      if(accR != undefined)
+        motionString += $scope.accX+','+$scope.accY+','+$scope.accZ+','+$scope.accR.alpha+','+$scope.accR.beta+','+$scope.accR.gamma+'\n';
+      else
+        motionString += $scope.accX+','+$scope.accY+','+$scope.accZ+'\n';
       mytimeout = $timeout($scope.onCountdown,measureIntervall);
     }else{
       console.log('in else... : '+$scope.recBtnTxt)
@@ -128,8 +132,8 @@ angular.module('TestCtrl', ['ngSanitize'])
 
   /* ===== ALERTS =====*/
   $scope.alerts = [];
-  $scope.addAlert = function(alertMsg) {
-    $scope.alerts.push({msg: alertMsg});
+  $scope.addAlert = function(alertMsg, type, label) {
+    $scope.alerts.push({msg: alertMsg, type:type, label:label});
   };
   $scope.closeAlert = function(index) {
     $scope.alerts.splice(index, 1);
@@ -146,15 +150,17 @@ angular.module('TestCtrl', ['ngSanitize'])
       }else{
         emailTo = 'gyrotion@gmail.com'
       }
+
       var mail = {
         emailFrom : $scope.formData.email,
         emailTo : emailTo,
         model : $scope.deviceType+': '+$scope.deviceName,
-        rotation : 'alpha,beta,gamma\n'+ rotationString ,
-        motion : 'x,y,z\n'+motionString,
-        gyro : 'alpha,beta,gamma\n'+ gyroString
+        //rotation : 'alpha,beta,gamma\n'+ rotationString ,
+        motion : motionString,
+        gyro : gyroString
       }
       var res = $http.post('/send', mail);
+
       res.success(function(data, status, headers, config) {
         $scope.message = data;
         $scope.alerts = [{msg:'Your recordnings has been send!', type:'success', label:'THANK YOU!'}];
@@ -171,10 +177,10 @@ angular.module('TestCtrl', ['ngSanitize'])
     }else if(!formData.email){
       $scope.alerts = [{msg:'Please fill in your email', type:'warning', label:'Not enough info!'}];
       $scope.onSending = false;
-    }else{
+    }/*else{
       $scope.alerts = [{msg:'Please fill in form in the "Device"-tab', type:'warning', label:'Not enough info!'}];
       $scope.onSending = false;
-    }
+    }*/
 
   };
 });

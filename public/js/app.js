@@ -32,6 +32,11 @@ angular.module('gymoApp', ['ngAnimate', 'ui.router','TestCtrl', 'GyroCtrl'])
             templateUrl: 'views/record.html'
         })
 
+        .state('form.camera', {
+            url: '/camera',
+            templateUrl: 'views/camera.html'
+        })
+
         .state('form.about', {
             url: '/about',
             templateUrl: 'views/about.html'
