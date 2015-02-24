@@ -17,15 +17,15 @@ angular.module('TestCtrl', ['ngSanitize'])
   /* Motion listener */
   if(window.DeviceMotionEvent) {
     window.addEventListener('devicemotion', function(event) {
-      if(event.accelerationIncludingGravity) {
-        accX = event.accelerationIncludingGravity.x;
-        accY = event.accelerationIncludingGravity.y;
-        accZ = event.accelerationIncludingGravity.z;
-        accR = event.rotationRate;
-      }else if(event.acceleration){
+      if(event.acceleration){
         accX = event.acceleration.x;
         accY = event.acceleration.y;
         accZ = event.acceleration.z; 
+        accR = event.rotationRate;
+      }else if(event.accelerationIncludingGravity) {
+        accX = event.accelerationIncludingGravity.x;
+        accY = event.accelerationIncludingGravity.y;
+        accZ = event.accelerationIncludingGravity.z;
         accR = event.rotationRate;
       }
       $scope.motionUpdate(accX, accY, accZ, accR);
