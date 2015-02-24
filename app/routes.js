@@ -29,11 +29,6 @@ module.exports = function(app) {
 		    subject: 'Gyrotion on '+ req.body.model, // Subject line
 		    html: 'From '+req.body.emailFrom, // plaintext body
 		    attachments : [
-		    	/*{
-		    		filename: 'rotation.csv',
-		    		contents: req.body.rotation,
-		    		contentType: 'text/plain'
-		    	},*/
 		    	{
 		    		filename: 'motion.csv',
 		    		contents: req.body.motion,

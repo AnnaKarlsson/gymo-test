@@ -28,10 +28,10 @@ angular.module('TestCtrl', ['ngSanitize'])
         accR = event.rotationRate;
       }
       $scope.motionUpdate(accX, accY, accZ, accR);
-      if (($scope.accR.alpha).toFixed(2) == 0 && ($scope.accR.beta).toFixed(2) == 0 && ($scope.accR.gamma).toFixed(2) == 0){
+      if (($scope.accR.alpha).toFixed(1) == 0 && ($scope.accR.beta).toFixed(1) == 0 && ($scope.accR.gamma).toFixed(1) == 0){
         isStill = true;
       }
-      else if(accZ < -8 && Math.abs(accX) < 0.1 && Math.abs(accY) < 0.3){
+      else if(accZ < -8 && Math.abs(accX) < 1 && Math.abs(accY) < 1){
         isStill = true;
       }else isStill = false;
     });
@@ -153,9 +153,8 @@ angular.module('TestCtrl', ['ngSanitize'])
 
       var mail = {
         emailFrom : $scope.formData.email,
-        emailTo : emailTo,
+        emailTo : 'annka673@student.liu.se',
         model : $scope.deviceType+': '+$scope.deviceName,
-        //rotation : 'alpha,beta,gamma\n'+ rotationString ,
         motion : motionString,
         gyro : gyroString
       }
@@ -163,7 +162,7 @@ angular.module('TestCtrl', ['ngSanitize'])
 
       res.success(function(data, status, headers, config) {
         $scope.message = data;
-        $scope.alerts = [{msg:'Your recordnings has been send!', type:'success', label:'THANK YOU!'}];
+        $scope.alerts = [{msg:'Your recordings has been send!', type:'success', label:'THANK YOU!'}];
         $scope.onSending = true;
       });
       res.error(function(data, status, headers, config) {
