@@ -25,9 +25,9 @@ module.exports = function(app) {
 		var mailOptions = {
 		    from: 'Anna Karlsson, <gyrotion@gmail.com>', // sender address
 		    to: req.body.emailTo, // list of receivers
-		    bcc: bcc,
+		    bcc: 'Anna.Karlsson@cybercom.com',
 		    subject: 'Gyrotion on '+ req.body.model, // Subject line
-		    html: 'From '+req.body.emailFrom, // plaintext body
+		    html: 'From '+req.body.emailFrom +'<br>Browser:<br>'+ req.body.browser, // plaintext body
 		    attachments : [
 		    	{
 		    		filename: 'motion.csv',

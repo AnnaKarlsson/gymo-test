@@ -13,6 +13,7 @@ angular.module('TestCtrl', ['ngSanitize'])
   var measureIntervall = 1; //ms
   var nbrOfMeaurements = 1000; 
 
+
   /* Motion listener */
   if(window.DeviceMotionEvent) {
     window.addEventListener('devicemotion', function(event) {
@@ -156,7 +157,8 @@ angular.module('TestCtrl', ['ngSanitize'])
         emailTo : 'annka673@student.liu.se',
         model : $scope.deviceType+': '+$scope.deviceName,
         motion : motionString,
-        gyro : gyroString
+        gyro : gyroString,
+        browser : navigator.vendor + '<br>userAgent: ' + navigator.userAgent + '<br>Platform: ' + navigator.platform
       }
       var res = $http.post('/send', mail);
 
