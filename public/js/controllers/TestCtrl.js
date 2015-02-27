@@ -1,11 +1,55 @@
+var alerts, onSending;
 /* Controller for test-data */
-angular.module('TestCtrl', ['ngSanitize'])
-.controller('formController', function($scope, $timeout, $interval, $http) {
+var app = angular.module('TestCtrl', ['ngSanitize']);
+app.directive('fileModel', ['$parse', function ($parse) {
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs) {
+            var model = $parse(attrs.fileModel);
+            var modelSetter = model.assign;
+            
+            element.bind('change', function(){
+                scope.$apply(function(){
+                    modelSetter(scope, element[0].files[0]);
+                });
+            });
+        }
+    };
+}]);
+
+app.service('fileUpload', ['$http', function ($http) {
+    this.uploadFileToUrl = function(file, mail){
+        var fd = new FormData();
+        fd.append('file', file);
+        fd.append('emailTo', 'gyrotion@gmail.com');
+        fd.append('emailFrom',  mail.emailFrom);
+        fd.append('model', mail.model);
+        fd.append('gyro', mail.gyro);
+        fd.append('motion', mail.motion);
+        fd.append('browser', mail.browser);
+        console.log('FD just before sending: ' + fd);
+        console.log('File: '+file);
+        $http.post('/send', fd, {
+            transformRequest: angular.identity,
+            headers: {'Content-Type': undefined}
+        })
+        .success(function(){
+          alerts = [{msg:'Your recordings has been sent.', type:'success', label:'THANK YOU!'}];
+          onSending = true;
+        })
+        .error(function(){
+          alerts = [{msg:'Did not manage to send mail..', type:'danger', label:'Warning!'}];
+          onSending = false;
+        });
+    }
+}]);
+app.controller('formController', function($scope, $timeout, $interval, $http, fileUpload) {
   $scope.deviceType = WURFL.form_factor;
   $scope.deviceName = WURFL.complete_device_name;
   $scope.recBtnTxt = "Record";
   $scope.sampleProgress = 0;
   $scope.isRecDone = false;
+  $scope.param = {};
   var gyroString = '';
   var motionString = '';
   var accR, accX, accY, accZ;
@@ -140,48 +184,36 @@ angular.module('TestCtrl', ['ngSanitize'])
     $scope.alerts.splice(index, 1);
   };
 
+  var movie = '';
+
   /* ===== SUBMIT & MAIL FORM DATA =====*/
   $scope.formData = {};
   // function to submit the form after all validation has occurred      
-  $scope.sendMail = function(isValid){
+  $scope.sendMail = function(){
     $scope.onSending = true;
-    if($scope.isRecDone && isValid){
-      if ($scope.formData.cc) {
-        emailTo = $scope.formData.email;
-      }else{
-        emailTo = 'gyrotion@gmail.com'
-      }
-
+    //if($scope.isRecDone && isValid){
+    if(true){
       var mail = {
-        emailFrom : $scope.formData.email,
-        emailTo : 'annka673@student.liu.se',
-        model : $scope.deviceType+': '+$scope.deviceName,
+        emailFrom : '',//$scope.formData.email,
+        emailTo : 'gyrotion@gmail.com',
+        model : '',//$scope.deviceType+': '+$scope.deviceName,
         motion : motionString,
         gyro : gyroString,
         browser : navigator.vendor + '<br>userAgent: ' + navigator.userAgent + '<br>Platform: ' + navigator.platform
       }
-      var res = $http.post('/send', mail);
-
-      res.success(function(data, status, headers, config) {
-        $scope.message = data;
-        $scope.alerts = [{msg:'Your recordings has been send!', type:'success', label:'THANK YOU!'}];
-        $scope.onSending = true;
-      });
-      res.error(function(data, status, headers, config) {
-        $scope.alerts = [{msg:'Did not manage to send mail..', type:'danger', label:'Warning!'}];
-        $scope.onSending = false;
-      });
+      var file = $scope.myFile;
+      console.log('file is ' + JSON.stringify(file));
+      fileUpload.uploadFileToUrl(file, mail);
+      $scope.alerts = alerts;
+      $scope.onSending = onSending;
 
     }else if(!$scope.isRecDone){
       $scope.alerts = [{msg:'Please make a motion and gyro recording before sending', type:'danger', label:'Missing!'}];
-       $scope.onSending = false;
+      $scope.onSending = false;
     }else if(!formData.email){
       $scope.alerts = [{msg:'Please fill in your email', type:'warning', label:'Not enough info!'}];
       $scope.onSending = false;
-    }/*else{
-      $scope.alerts = [{msg:'Please fill in form in the "Device"-tab', type:'warning', label:'Not enough info!'}];
-      $scope.onSending = false;
-    }*/
-
+    }
   };
+
 });

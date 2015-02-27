@@ -1,16 +1,13 @@
 <div class="form-container">
+  <!-- Upload camera-video -->
+  <input type="file" file-model="myFile"/>
+
   <!-- EMAIL -->
   <div class="form-group" ng-class="{ 'has-error' : userForm.email.$invalid && !userForm.email.$pristine }">
     <label>Your Email</label>
     <input type="email" name="email" class="form-control" ng-model="formData.email" placeholder="your@email.nu" required>
     <p ng-show="userForm.email.$invalid && !userForm.email.$pristine" class="help-block">Enter a valid email.</p>
   </div>
-  <!-- CC 
-  <div class="form-group">
-    <label class="checkbox-inline">
-      <input type="checkbox" name="cc" ng-model="formData.cc"> I wan't you to send my testdata to me.
-    </label>
-  </div>-->
         
   <button ng-disabled="onSending" type="submit" class="btn btn-primary btn-lg btn-block btn-success">Send <span class="glyphicon glyphicon-send"></span></button>
 </div>

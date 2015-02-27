@@ -1,14 +1,18 @@
 
 // create our angular app and inject ngAnimate and ui-router 
 // =============================================================================
-angular.module('gymoApp', ['ngAnimate', 'ui.router','TestCtrl', 'GyroCtrl'])
+angular.module('gymoApp', ['ngAnimate', 'ui.router', 'TestCtrl','GyroCtrl'])
 
 // configuring our routes 
 // =============================================================================
 .config(function($stateProvider, $urlRouterProvider) {
     
     $stateProvider
-    
+        .state('test', {
+            url: '/test',
+            templateUrl: 'views/test.html',
+            controller: 'formController'
+        })
         // route to show our basic form (/form)
         .state('form', {
             url: '/form',
@@ -30,11 +34,6 @@ angular.module('gymoApp', ['ngAnimate', 'ui.router','TestCtrl', 'GyroCtrl'])
         .state('form.record', {
             url: '/record',
             templateUrl: 'views/record.html'
-        })
-
-        .state('form.camera', {
-            url: '/camera',
-            templateUrl: 'views/camera.html'
         })
 
         .state('form.about', {
