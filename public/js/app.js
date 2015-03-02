@@ -1,53 +1,48 @@
 
 // create our angular app and inject ngAnimate and ui-router 
 // =============================================================================
-angular.module('gymoApp', ['ngAnimate', 'ui.router', 'TestCtrl','GyroCtrl'])
+angular.module('gymoApp', ['ngAnimate', 'ui.router', 'TestCtrl'])
+.config(['cfpLoadingBarProvider', function(cfpLoadingBarProvider) {
+    cfpLoadingBarProvider.includeSpinner = false;
+}])
 
 // configuring our routes 
 // =============================================================================
 .config(function($stateProvider, $urlRouterProvider) {
     
     $stateProvider
-        .state('test', {
-            url: '/test',
-            templateUrl: 'views/test.html',
-            controller: 'formController'
-        })
-        // route to show our basic form (/form)
-        .state('form', {
-            url: '/form',
+        .state('home', {
+            url: '/home',
             templateUrl: 'views/home.html',
             controller: 'formController'
         })
 
-        .state('form.gyro', {
-            url: '/gyro',
-            templateUrl: 'views/live-gyro.html',
-            controller: 'GyroController'
-        })
-
-        .state('form.motion', {
-            url: '/motion',
+        .state('home.data', {
+            url: '/data',
             templateUrl: 'views/live-motion.html'
         })
         
-        .state('form.record', {
-            url: '/record',
-            templateUrl: 'views/record.html'
+        .state('home.motion', {
+            url: '/motion',
+            templateUrl: 'views/motion.html'
         })
 
-        .state('form.about', {
+        .state('home.about', {
             url: '/about',
             templateUrl: 'views/about.html'
         })
         
-        // url will be /form/payment
-        .state('form.send', {
+        .state('home.camera', {
+            url: '/camera',
+            templateUrl: 'views/camera.html'
+        })
+
+        .state('home.send', {
             url: '/send',
             templateUrl: 'views/send-data.html'
         });
        
     // catch all route
     // send users to the form page 
-    $urlRouterProvider.otherwise('/form/record');
+    $urlRouterProvider.otherwise('home/motion');
 })

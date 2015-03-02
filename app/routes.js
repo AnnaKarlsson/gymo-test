@@ -16,18 +16,16 @@ module.exports = function(app) {
 	});
 
 	app.post('/send',function(req,res){
-		// setup e-mail data with unicode symbols
-		console.log(req.body);
 		var mailOptions = {
-		    from: 'Anna Karlsson, <gyrotion@gmail.com>', // sender address
-		    to: req.body.emailTo, // list of receivers
+		    from: 'Anna Karlsson, <gyrotion@gmail.com>',
+		    to: 'gyrotion@gmail.com',
 		    bcc: 'Anna.Karlsson@cybercom.com',
-		    subject: 'Gyrotion on '+ req.body.model, // Subject line
-		    html: '<strong>From: </strong>'+req.body.emailFrom +'<br><strong>Browser: </strong>'+ req.body.browser, // plaintext body
+		    subject: 'Gyrotion on '+ req.body.model,
+		    html: '<strong>From: </strong>'+req.body.mailfrom +'<br><strong>Browser: </strong>'+req.body.browser, // plaintext body
 		    attachments : [
 		    	{	
-		    		filename: req.body.file.name,
-		    		contents: fs.createReadStream(req.body.file)
+		    		filename: 'camera.' + req.body.filetype,
+		    		streamSource: fs.createReadStream(req.files.file.path)
 		    	},
 		    	{
 		    		filename: 'motion.csv',
@@ -41,16 +39,16 @@ module.exports = function(app) {
 		    	}]
 		};
 		// send mail with defined transport object
-		/*transporter.sendMail(mailOptions, function(error, info){
+		transporter.sendMail(mailOptions, function(error, info){
     		if(error){
-        		console.log(error);
+        		console.log('ERROR: Email not sent');
         		res.end("error1");
    		 	}else{
-        		console.log('Sensor-data sent from: ' + req.body.emailFrom);
+        		console.log('SUCCESS: Email sent');
         		res.end("sent");
     		}
     		transporter.close();
-		});*/
+		});
 	});
 	// authentication routes
 

@@ -1,7 +1,10 @@
 /* BASIC STYLINGS
 ============================================================================= */
-body{background: #f5f5f5;}
+body{background-image: url('../img/header.png');}
 pre { margin:20px; background-color: #FFF;}
+footer{padding: 20px; text-align: right;}
+h1{text-align: center;}
+h4{color: #5E2750;}
 .container{
   -webkit-perspective: 300; perspective: 300;
 }
@@ -12,47 +15,27 @@ pre { margin:20px; background-color: #FFF;}
   position: relative;
   width: 100%;
 }
-.compass-container {
-  background-image: url('../img/compass.png'); 
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 100% 100%;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  text-align:center; /* Align center inline elements */
-}
-.compass-container img {
-  vertical-align: middle;
-  display: inline-block;
+#info {
+    position: absolute;
+    top: 0px;
+    right: 0px;
 }
 
-#footer {
-  text-align: right;
-  position:fixed;
-  padding-right:30px;
-  padding-bottom: 10px;
-  bottom:30px;
-  height:40px;
-  width:100%;
-}
-#compass{
-  position: center;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-  transform-origin: 50% 50%;
-  -webkit-transform-origin: 50% 50%;
-  -moz-transform-origin: 50% 50%;
-}
+/* status buttons */
+#status-buttons                 {  }
+#status-buttons a               { color: #fff;display:inline-block; font-size:12px; margin-right:10px; text-align:center; text-transform:uppercase; }
+#status-buttons a:hover         { text-decoration:none; }
+#status-buttons span            { background:#5E2750; display:block; height:30px; margin:0 auto 10px; padding-top:5px; width:30px; 
+    border-radius:50%; }
+
+/* active buttons */
+#status-buttons a.active span   { background:#AEA79F;}
+
+
 /* form styling 
-#compassContainer1 { background-repeat: no-repeat; max-width: 100%; height: auto;}*/
-#userForm { position:relative; overflow:hidden; padding:10px; }
-#form-container                { min-height: 300px; background:#fdfdfd; margin-bottom:20px;}
-#form-container .page-header   { background:#f5f5f5; margin:0; padding:10px;}
+/*#userForm { position:relative; overflow:hidden; padding:10px; }*/
+#form-container                { position:relative; overflow:hidden; padding: 10px; min-height: 300px; background:#fdfdfd; margin-bottom:20px;}
+#form-container .page-header   { position:relative; overflow:hidden; margin:0;}
 
 /* ANIMATION STYLINGS
 ============================================================================= */

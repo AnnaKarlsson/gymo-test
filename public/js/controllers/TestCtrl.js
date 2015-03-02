@@ -1,6 +1,5 @@
-var alerts, onSending;
 /* Controller for test-data */
-var app = angular.module('TestCtrl', ['ngSanitize']);
+var app = angular.module('TestCtrl', ['ngSanitize', 'angular-loading-bar']);
 app.directive('fileModel', ['$parse', function ($parse) {
     return {
         restrict: 'A',
@@ -17,33 +16,7 @@ app.directive('fileModel', ['$parse', function ($parse) {
     };
 }]);
 
-app.service('fileUpload', ['$http', function ($http) {
-    this.uploadFileToUrl = function(file, mail){
-        var fd = new FormData();
-        fd.append('file', file);
-        fd.append('emailTo', 'gyrotion@gmail.com');
-        fd.append('emailFrom',  mail.emailFrom);
-        fd.append('model', mail.model);
-        fd.append('gyro', mail.gyro);
-        fd.append('motion', mail.motion);
-        fd.append('browser', mail.browser);
-        console.log('FD just before sending: ' + fd);
-        console.log('File: '+file);
-        $http.post('/send', fd, {
-            transformRequest: angular.identity,
-            headers: {'Content-Type': undefined}
-        })
-        .success(function(){
-          alerts = [{msg:'Your recordings has been sent.', type:'success', label:'THANK YOU!'}];
-          onSending = true;
-        })
-        .error(function(){
-          alerts = [{msg:'Did not manage to send mail..', type:'danger', label:'Warning!'}];
-          onSending = false;
-        });
-    }
-}]);
-app.controller('formController', function($scope, $timeout, $interval, $http, fileUpload) {
+app.controller('formController', function($scope, $timeout, $interval, $http) {
   $scope.deviceType = WURFL.form_factor;
   $scope.deviceName = WURFL.complete_device_name;
   $scope.recBtnTxt = "Record";
@@ -56,6 +29,9 @@ app.controller('formController', function($scope, $timeout, $interval, $http, fi
   var isStill = true;
   var measureIntervall = 1; //ms
   var nbrOfMeaurements = 1000; 
+  var fd = new FormData();
+  var hasFile = false;
+  var onSending = false;
 
 
   /* Motion listener */
@@ -73,10 +49,9 @@ app.controller('formController', function($scope, $timeout, $interval, $http, fi
         accR = event.rotationRate;
       }
       $scope.motionUpdate(accX, accY, accZ, accR);
-      if (($scope.accR.alpha).toFixed(1) == 0 && ($scope.accR.beta).toFixed(1) == 0 && ($scope.accR.gamma).toFixed(1) == 0){
+      if (($scope.accR.alpha).toFixed(0) == 0 && ($scope.accR.beta).toFixed(0) == 0 && ($scope.accR.gamma).toFixed(0) == 0){
         isStill = true;
-      }
-      else if(accZ < -8 && Math.abs(accX) < 1 && Math.abs(accY) < 1){
+      }else if(accZ < -8 && Math.abs(accX) < 1 && Math.abs(accY) < 1){
         isStill = true;
       }else isStill = false;
     });
@@ -107,7 +82,6 @@ app.controller('formController', function($scope, $timeout, $interval, $http, fi
       $scope.alerts = [ {msg : 'This device is not support motion', type:'info', label:'Sorry,'}];
       $scope.isDisabled = true;
     }else{
-      console.log('after runned isStill() status ='+status);
       if (isStill){    
         isRecDone = false;
         $scope.isDisabled = true;
@@ -163,10 +137,8 @@ app.controller('formController', function($scope, $timeout, $interval, $http, fi
         motionString += $scope.accX+','+$scope.accY+','+$scope.accZ+'\n';
       mytimeout = $timeout($scope.onCountdown,measureIntervall);
     }else{
-      console.log('in else... : '+$scope.recBtnTxt)
       if($scope.recBtnTxt == "Recording: 100%"){
         $scope.isRecDone = true;
-        console.log('isRecDone: '+$scope.isRecDone);
         $scope.$apply();
       }
     }
@@ -184,36 +156,57 @@ app.controller('formController', function($scope, $timeout, $interval, $http, fi
     $scope.alerts.splice(index, 1);
   };
 
-  var movie = '';
+  /* ===== Upload from CAMERA ===== */
+  var type = '';
+  $scope.uploadFile = function(files) {
+    //Take the first selected file
+    if (files[0] != undefined) {
+      type = '';
+      if (files[0].type == 'video/mp4') {
+        type = 'mp4';
+      } else if(files[0].type == 'video/MOV'){
+        type = 'mov';
+      }
+      fd.append('file', files[0]);
+      hasFile = true;
+    }
+    
+  };
 
   /* ===== SUBMIT & MAIL FORM DATA =====*/
-  $scope.formData = {};
-  // function to submit the form after all validation has occurred      
+  $scope.formData = {};     
   $scope.sendMail = function(){
     $scope.onSending = true;
-    //if($scope.isRecDone && isValid){
-    if(true){
-      var mail = {
-        emailFrom : '',//$scope.formData.email,
-        emailTo : 'gyrotion@gmail.com',
-        model : '',//$scope.deviceType+': '+$scope.deviceName,
-        motion : motionString,
-        gyro : gyroString,
-        browser : navigator.vendor + '<br>userAgent: ' + navigator.userAgent + '<br>Platform: ' + navigator.platform
-      }
-      var file = $scope.myFile;
-      console.log('file is ' + JSON.stringify(file));
-      fileUpload.uploadFileToUrl(file, mail);
-      $scope.alerts = alerts;
-      $scope.onSending = onSending;
-
-    }else if(!$scope.isRecDone){
+    var file = $scope.formData.file;
+    if(hasFile /*&& $scope.isRecDone*/){
+      fd.append('filetype', type);
+      fd.append('mailfrom',  $scope.formData.email);
+      fd.append('model', $scope.deviceType+': '+$scope.deviceName);
+      fd.append('gyro', gyroString);
+      fd.append('motion', motionString);
+      fd.append('browser', navigator.vendor + '<br>' + navigator.userAgent + '<br>' + navigator.platform);
+      $http.post('/send', fd, {
+            transformRequest: angular.identity,
+            headers: {'Content-Type': undefined}
+        })
+        .success(function(){
+          $scope.alerts = [{msg:'Your recordings has been sent.', type:'success', label:'THANK YOU!'}];
+          onSending = true;
+        })
+        .error(function(){
+          $scope.alerts = [{msg:'Did not manage to send mail..', type:'danger', label:'Warning!'}];
+          onSending = false;
+        });
+    }else if(/*!$scope.isRecDone*/false){
       $scope.alerts = [{msg:'Please make a motion and gyro recording before sending', type:'danger', label:'Missing!'}];
       $scope.onSending = false;
+    }else if(!hasFile){
+      $scope.onSending = false;
+      $scope.alerts = [{msg:'Please add a clip from your camera', type:'warning', label:'Record camera!'}];
     }else if(!formData.email){
       $scope.alerts = [{msg:'Please fill in your email', type:'warning', label:'Not enough info!'}];
       $scope.onSending = false;
     }
-  };
+  }
 
 });

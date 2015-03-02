@@ -1,15 +1,21 @@
+<div id="info">
+    <a ui-sref-active="active" ui-sref=".about"><span><i class="fa fa-info fa-lg"></i></span></a>
+</div>
 <div class="row">
 <div class="col-sm-8 col-sm-offset-2">
-
 <div id="form-container">
-<div class="page-header text-center">
-<div class="btn-toolbar" align="center">
-  <div>
-    <h4><small>Recording of Gyroscope- & Accelometer-data on</small><br>{{deviceName}}</h4>
-  </div>
+  <div class="page-header text-center">
+      <h4>
+        <small>Recording sensor-data on</small><br>
+        {{deviceName}}
+      </h4>
 
-</div>
-</div>
+      <div id="status-buttons" class="text-center">
+        <a ui-sref-active="active" ui-sref=".motion"><span>1</span></a>
+        <a ui-sref-active="active" ui-sref=".camera"><span>2</span></a>
+        <a ui-sref-active="active" ui-sref=".send"><span>3</span></a>
+      </div>
+  </div>
 
   <div>
     <div>
@@ -24,14 +30,13 @@
 	</div>
       
   <!-- use ng-submit to catch the form submission and use our Angular function -->
-  <form id="userForm" name="userForm" ng-submit="sendMail(userForm.$valid)" novalidate>
+  <form id="userForm" name="userForm" ng-submit="sendMail()" novalidate> 
     <!-- our nested state views will be injected here -->
     <div id="form-views" ui-view></div>
-
   </form>
-  
-</div>
 
+
+</div>
 </div>
 </div>
 
