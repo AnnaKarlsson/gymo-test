@@ -15,11 +15,7 @@ h4{color: #5E2750;}
   position: relative;
   width: 100%;
 }
-#info {
-    position: absolute;
-    top: 0px;
-    right: 0px;
-}
+#info a { position: absolute; top: 10px; right: 10px;}
 
 /* status buttons */
 #status-buttons                 {  }

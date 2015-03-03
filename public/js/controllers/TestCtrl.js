@@ -168,17 +168,17 @@ app.controller('formController', function($scope, $timeout, $interval, $http) {
         type = 'mov';
       }
       fd.append('file', files[0]);
-      hasFile = true;
+      $scope.hasFile = true;
     }
     
   };
 
   /* ===== SUBMIT & MAIL FORM DATA =====*/
   $scope.formData = {};     
-  $scope.sendMail = function(){
+  $scope.sendMail = function(isValid){
     $scope.onSending = true;
     var file = $scope.formData.file;
-    if(hasFile /*&& $scope.isRecDone*/){
+    if($scope.hasFile && $scope.isRecDone && isValid){
       fd.append('filetype', type);
       fd.append('mailfrom',  $scope.formData.email);
       fd.append('model', $scope.deviceType+': '+$scope.deviceName);
@@ -200,7 +200,7 @@ app.controller('formController', function($scope, $timeout, $interval, $http) {
     }else if(/*!$scope.isRecDone*/false){
       $scope.alerts = [{msg:'Please make a motion and gyro recording before sending', type:'danger', label:'Missing!'}];
       $scope.onSending = false;
-    }else if(!hasFile){
+    }else if(!$scope.hasFile){
       $scope.onSending = false;
       $scope.alerts = [{msg:'Please add a clip from your camera', type:'warning', label:'Record camera!'}];
     }else if(!formData.email){
