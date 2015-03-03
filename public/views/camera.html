@@ -1,15 +1,15 @@
-<h1>Camera sensor</h1>
-<p class="text-success"><strong>Record and upload a 5 seconds black movie.</strong></p>
-  <ol>
-    <li>Press on 'Choose File' </li>
-    <li>Choose camrecorder (Videokamera) </li>
-    <li>Put your device on flat surface </li>
-    <li>Record for 5 sec. (This movie is gonna be black)</li>
-    <li><i class="fa fa-check"></i></li>
-  </ol>
+<h1>Camera sensor<small><i><br>5 seconds BLACK movie.</i></small></h1>
+Record and upload:
+<ol>
+  <li>Put your device on flat surface <small>(This makes the movie black)</small></li>
+  <li>Press on 'Choose File' </li>
+  <li>Choose camrecorder <small>(Videokamera)</small> </li>
+  <li>Record for 5 sec. </li>
+  <li><i class="fa fa-check"></i></li>
+</ol>
 <input class="form-control" type="file" name="file" accept=".mp4, .MOV" onchange="angular.element(this).scope().uploadFile(this.files)" required>
 <br>
-<button ng-disabled="!hasFile" ui-sref="home.send" class="btn btn-primary btn-lg btn-block btn-info">
+<button ng-disabled="!hasFile" ui-sref="home.submit" class="btn btn-primary btn-lg btn-block btn-info">
     Next step <span><i class="fa fa-arrow-right"></i></span>
 </button>
 

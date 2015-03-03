@@ -1,59 +1,127 @@
 /* BASIC STYLINGS
 ============================================================================= */
-body{background-image: url('../img/header.png');}
-pre { margin:20px; background-color: #FFF;}
-footer{padding: 20px; text-align: right;}
-h1{text-align: center;}
-h4{color: #5E2750;}
+body{
+  background-image: url('../img/header.png');
+}
+h1{
+  text-align: center;
+}
+h4{
+  color: #5E2750;
+}
+
+/* Picture alignment */
 .container{
   -webkit-perspective: 300; perspective: 300;
 }
 .dummy {
-  padding-top: 100%; /* forces 1:1 aspect ratio */
+  padding-top: 100%;
 }
 .responsive-container {
   position: relative;
   width: 100%;
 }
-#info a { position: absolute; top: 10px; right: 10px;}
+/* Info top right corner */
+#info a { 
+  position: absolute; 
+  top: 10px; 
+  right: 10px;
+  color: #77216F; 
+}
+/* STATUS BUTTONS */
+#status-buttons{ 
+  color: #5E2750;
+}
+#status-buttons a { 
+  color: #fff;
+  display:inline-block; 
+  font-size:12px; 
+  text-align:center; 
+  margin-right: 10px;
+}
+#status-buttons a:hover { 
+  text-decoration:none; 
+}
+#status-buttons span { 
+  background:#5E2750; 
+  display:block; 
+  height:50px; 
+  margin:0 auto 10px; 
+  width:50px; 
+  border-radius:20%; 
+  display: inline-block;
+  line-height: 60px;
+  position: relative;
+}
+#status-buttons span:after {
+  content: ' ';
+  height: 0;
+  position: absolute;
+  width: 0;
 
-/* status buttons */
-#status-buttons                 {  }
-#status-buttons a               { color: #fff;display:inline-block; font-size:12px; margin-right:10px; text-align:center; text-transform:uppercase; }
-#status-buttons a:hover         { text-decoration:none; }
-#status-buttons span            { background:#5E2750; display:block; height:30px; margin:0 auto 10px; padding-top:5px; width:30px; 
-    border-radius:50%; }
+  border: 10px solid transparent;
+  border-left-color: #5E2750;
+  top: 15px;
+  left: 100%;
+}
+#status-buttons a.active span { 
+  background:#AEA79F;
+  text-decoration:none;
+}
+#status-buttons a.active span:after {
+  content: ' ';
+  height: 0;
+  position: absolute;
+  width: 0;
 
-/* active buttons */
-#status-buttons a.active span   { background:#AEA79F;}
+  border: 10px solid transparent;
+  border-left-color: #AEA79F;
+  top: 15px;
+  left: 100%;
+}
 
 
-/* form styling 
-/*#userForm { position:relative; overflow:hidden; padding:10px; }*/
-#form-container                { position:relative; overflow:hidden; padding: 10px; min-height: 300px; background:#fdfdfd; margin-bottom:20px;}
-#form-container .page-header   { position:relative; overflow:hidden; margin:0;}
+/* FORM */
+#form-container { 
+  position:relative; 
+  overflow:hidden; 
+  padding: 10px; 
+  min-height: 300px; 
+  background:#fdfdfd; 
+  margin-bottom:20px;}
+  
+#form-container .page-header {
+  background-image: url('../favicon/mstile-310x310.png'); 
+  position:relative; 
+  overflow:hidden; 
+  margin:0;
+}
 
 /* ANIMATION STYLINGS
 ============================================================================= */
-#test-form            { position:relative; min-height:300px; overflow:hidden; padding:10px;}
 
 /* basic styling for entering and leaving */
 /* left and right added to ensure full width */
 #form-views.ng-enter,
-#form-views.ng-leave      { position:absolute; left:30px; right:30px;
-    transition:0.5s all ease; -moz-transition:0.5s all ease; -webkit-transition:0.5s all ease; 
+#form-views.ng-leave { 
+  position:absolute; 
+  left:30px; 
+  right:30px;
+  transition:0.5s all ease; 
+  -moz-transition:0.5s all ease; 
+  -webkit-transition:0.5s all ease; 
 }
     
 /* enter animation */
-#form-views.ng-enter            { 
-    -webkit-animation:slideInRight 0.5s both ease;
+#form-views.ng-enter { 
+  -webkit-animation:slideInRight 0.5s both ease;
 	-moz-animation:slideInRight 0.5s both ease;
 	animation:slideInRight 0.5s both ease; 
 }
 
 /* leave animation */
-#form-views.ng-leave            { 
-    -webkit-animation:slideOutLeft 0.5s both ease;
+#form-views.ng-leave { 
+  -webkit-animation:slideOutLeft 0.5s both ease;
 	-moz-animation:slideOutLeft 0.5s both ease;
 	animation:slideOutLeft 0.5s both ease;   
 }

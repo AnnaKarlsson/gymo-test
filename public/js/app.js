@@ -1,7 +1,7 @@
 
 // create our angular app and inject ngAnimate and ui-router 
 // =============================================================================
-angular.module('gymoApp', ['ngAnimate', 'ui.router', 'TestCtrl'])
+angular.module('gymoApp', ['ngAnimate', 'ui.router', 'Ctrl'])
 .config(['cfpLoadingBarProvider', function(cfpLoadingBarProvider) {
     cfpLoadingBarProvider.includeSpinner = false;
 }])
@@ -14,7 +14,7 @@ angular.module('gymoApp', ['ngAnimate', 'ui.router', 'TestCtrl'])
         .state('home', {
             url: '/home',
             templateUrl: 'views/home.html',
-            controller: 'formController'
+            controller: 'Controller'
         })
 
         .state('home.data', {
@@ -37,9 +37,9 @@ angular.module('gymoApp', ['ngAnimate', 'ui.router', 'TestCtrl'])
             templateUrl: 'views/camera.html'
         })
 
-        .state('home.send', {
-            url: '/send',
-            templateUrl: 'views/send-data.html'
+        .state('home.submit', {
+            url: '/submit',
+            templateUrl: 'views/submit.html'
         });
        
     // catch all route
