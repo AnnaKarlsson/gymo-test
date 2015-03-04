@@ -49,7 +49,7 @@ app.controller('Controller', function($scope, $timeout, $interval, $http) {
       }
       if (($scope.accR.alpha).toFixed(0) == 0 && ($scope.accR.beta).toFixed(0) == 0 && ($scope.accR.gamma).toFixed(0) == 0){
         isStill = true;
-      }else if($scope.accZ < -8 && Math.abs(accX) < 1 && Math.abs($scope.accY ) < 1){
+      }else if($scope.accZ < -8 && Math.abs($scope.accX) < 1 && Math.abs($scope.accY ) < 1){
         isStill = true;
       }else isStill = false;
     });
@@ -148,35 +148,32 @@ app.controller('Controller', function($scope, $timeout, $interval, $http) {
   };
 
   /* ===== Upload from CAMERA ===== */
-  var type = '';
+  /*C
   $scope.uploadFile = function(files) {
     //Take the first selected file
     if (files[0] != undefined) {
       if (files[0].type == 'video/mp4') {
-        type = 'mp4';
+        fd.append('filetype', 'mp4');
         fd.append('file', files[0]);
         $scope.hasFile = true;
       } else if(files[0].type == 'video/MOV'){
-        type = 'mov';
+        fd.append('filetype', 'MOV');
         fd.append('file', files[0]);
         $scope.hasFile = true;
       }else{
-        type = '';
         $scope.alerts = [{msg:'Record and upload a 5 seconds BLACK movie-clip', type:'danger', label:'Wrong!'}];
       }
       $scope.$apply();
     }
     
-  };
+  };*/
 
   /* ===== SUBMIT & MAIL FORM DATA =====*/
-  $scope.formData = {};     
+  $scope.user = {};
   $scope.sendMail = function(isValid){
     $scope.onSending = true;
-    var file = $scope.formData.file;
-    if($scope.hasFile && $scope.isRecDone && isValid){
-      fd.append('filetype', type);
-      fd.append('mailfrom',  $scope.formData.email);
+    if(/*C$scope.hasFile && */$scope.isRecDone && isValid){
+      fd.append('mailfrom',  $scope.user.email);
       fd.append('model', $scope.deviceType+': '+$scope.deviceName);
       fd.append('gyro', gyroString);
       fd.append('motion', motionString);
@@ -196,10 +193,10 @@ app.controller('Controller', function($scope, $timeout, $interval, $http) {
     }else if(!$scope.isRecDone){
       $scope.alerts = [{msg:'Please make a motion and gyro recording before sending', type:'danger', label:'Missing!'}];
       $scope.onSending = false;
-    }else if(!$scope.hasFile){
+    /*C}else if(!$scope.hasFile){
       $scope.onSending = false;
-      $scope.alerts = [{msg:'Please add a clip from your camera', type:'warning', label:'Record camera!'}];
-    }else if(!formData.email){
+      $scope.alerts = [{msg:'Please add a clip from your camera', type:'warning', label:'Record camera!'}];*/
+    }else if(!$scope.user.email){
       $scope.alerts = [{msg:'Please fill in your email', type:'warning', label:'Not enough info!'}];
       $scope.onSending = false;
     }

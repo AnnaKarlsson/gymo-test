@@ -10,6 +10,7 @@
     "express-session": "^1.10.3",
     "method-override": "~2.0.2",
     "mongoose": "^3.8.23",
+    "multer": "^0.1.8",
     "nodemailer": "^0.7.1",
     "nodemailer-direct-transport": "^1.0.0",
     "nodemailer-sendgrid-transport": "^0.1.0"
