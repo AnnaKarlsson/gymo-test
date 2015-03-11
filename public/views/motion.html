@@ -12,12 +12,10 @@
   </a>
 </div>
 <div ng-hide="isRecDone">
-  <button type="button" class="btn btn-primary btn-lg btn-block btn-info" ng-click="record()" ng-disabled="isDisabled" ng-model="isDisabled"><span class="glyphicon glyphicon-record" aria-hidden="true"></span> {{recBtnTxt}}</button>
+  <button type="button" class="btn btn-primary btn-lg btn-block btn-info" ng-click="clickedRecord()" ng-disabled="isDisabled" ng-model="isDisabled"><span class="glyphicon glyphicon-record" aria-hidden="true"></span> {{recBtnTxt}}</button>
 </div>
-<div class="table-responsive">
+<!--<div class="table-responsive">
   <h3 class="text-center">First 10 samples:</h3>
-
-  <!-- TABLE -->
   <table class="table table-striped">
     <thead>
       <th>X</th>
@@ -39,4 +37,4 @@
     </tbody>
   </table>
   <p>X,Y and Z is how much the device is accelerating and Alpha, Beta and Gamma is measurements of the gyroscope. <br>(If Alpha, Beta and Gamma not has values, means that your device don't have gyroscope or that it can't be read.)</p>
-</div>
+</div>-->

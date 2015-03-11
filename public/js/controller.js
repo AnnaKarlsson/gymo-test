@@ -22,16 +22,15 @@ app.controller('Controller', function($scope, $timeout, $interval, $http) {
   $scope.recBtnTxt = "Record";
   $scope.sampleProgress = 0;
   $scope.isRecDone = false;
+  $scope.isDisabled = false;
   $scope.param = {};
   var gyroString = '';
   var motionString = '';
   var isStill = true;
-  var measureIntervall = 1; //ms
-  var nbrOfMeaurements = 1000; 
   var fd = new FormData();
   var hasFile = false;
   var onSending = false;
-
+  var time = 30;
 
   /* Motion listener */
   if(window.DeviceMotionEvent) {
@@ -47,9 +46,11 @@ app.controller('Controller', function($scope, $timeout, $interval, $http) {
         $scope.accZ = event.accelerationIncludingGravity.z;
         $scope.accR = event.rotationRate;
       }
-      if (($scope.accR.alpha).toFixed(0) == 0 && ($scope.accR.beta).toFixed(0) == 0 && ($scope.accR.gamma).toFixed(0) == 0){
-        isStill = true;
-      }else if($scope.accZ < -8 && Math.abs($scope.accX) < 1 && Math.abs($scope.accY ) < 1){
+      if (!event.acceleration) {
+        if(Math.abs($scope.accZ) > 8 && Math.abs($scope.accX) < 1 && Math.abs($scope.accY) < 1)
+          isStill = true;
+        else isStill = false;
+      }else if (0 == ($scope.accR.beta).toFixed(0) && ($scope.accR.alpha).toFixed(0) == 0 && ($scope.accR.gamma).toFixed(0) == 0){
         isStill = true;
       }else isStill = false;
     });
@@ -66,77 +67,69 @@ app.controller('Controller', function($scope, $timeout, $interval, $http) {
   }
   
 
-
   /* ===== RECORD ====== */
-  $scope.record= function(){
+  $scope.clickedRecord= function(){
     if (!WURFL.is_mobile) {
       $scope.alerts = [ {msg : 'This device is not support motion', type:'info', label:'Sorry,'}];
       $scope.isDisabled = true;
     }else{
-      if (isStill){    
-        isRecDone = false;
-        $scope.isDisabled = true;
-        $scope.measurements = [];
-        gyroString = 'alpha,beta,gamma\n';
-        if($scope.accR != undefined)
-          motionString = 'x,y,z,alpha,beta,gamma\n';
-        else
-          motionString = 'x,y,z\n';
-        $scope.counter = nbrOfMeaurements;
-        $scope.rMessage = "Recording ";
-        mytimeout = $timeout($scope.onCountdown,measureIntervall);
-      }else{
-        $scope.alerts = [{msg : 'Put your device on a flat surface', type:'danger', label:'Warning!'}];
-      }
+      $scope.isDisabled = true;
+      // Compensate for devices with non flat backs
+      $scope.recBtnTxt = "Recording.";
+      window.setTimeout(function(){
+        $scope.recBtnTxt = "Recording..";
+        $scope.$apply();
+        window.setTimeout(function(){
+          $scope.recBtnTxt = "Recording...";
+          $scope.$apply();
+          window.setTimeout($scope.startRec(),333);
+        },333);
+      },333);
     }
   };
-
-  $scope.onCountdown = function(){
-    if ($scope.counter > 0) {
-      if(!isStill){
-        $scope.recBtnTxt = "Record";
-        $scope.sampleProgress = 0;
-        $scope.alerts = [{msg : 'Put your device on a flat surface', type:'danger', label:'Recording aborted!'}];
-        $scope.isDisabled = false;
-        return;
-      }
-      $scope.counter--;
-      $scope.sampleProgress = Math.ceil(100*((1-($scope.counter / nbrOfMeaurements))));
-      $scope.recBtnTxt = "Recording: "+$scope.sampleProgress+"%";
-      if($scope.counter > nbrOfMeaurements -11){
-        if($scope.gyroAlpha != undefined)
-          $scope.measurements.push({
-            'x': $scope.accX, 
-            'y': $scope.accY , 
-            'z': $scope.accZ,
-            'a': $scope.gyroAlpha,
-            'b': $scope.gyroBeta,
-            'g': $scope.gyroGamma
-          });
-        else{
-          $scope.measurements.push({
-            'x': $scope.accX, 
-            'y': $scope.accY , 
-            'z': $scope.accZ
-          });
-        }
-      }
-      gyroString += $scope.gyroAlpha+','+$scope.gyroBeta+','+$scope.gyroGamma+'\n';
-      if($scope.accR != undefined)
-        motionString += $scope.accX+','+$scope.accY +','+$scope.accZ+','+$scope.accR.alpha+','+$scope.accR.beta+','+$scope.accR.gamma+'\n';
-      else
-        motionString += $scope.accX+','+$scope.accY +','+$scope.accZ+'\n';
-      mytimeout = $timeout($scope.onCountdown,measureIntervall);
+  var start;
+  $scope.startRec = function(){
+    if (isStill){
+        isRecDone = false;
+        $scope.isDisabled = true;
+        gyroString = '';
+        motionString = '';
+        start = Math.floor(Date.now()/1000) + time;
+        $scope.recTimeLeft = start - Math.floor(Date.now()/1000);
+        $scope.recordning();
     }else{
-      if($scope.recBtnTxt == "Recording: 100%"){
-        $scope.isRecDone = true;
-        $scope.$apply();
-      }
+      $scope.alerts = [{msg : 'Put your device on a flat surface', type:'danger', label:'Warning!'}];
+      $scope.isDisabled = false;
+      $scope.$apply();
     }
-    $scope.$apply();
   }
 
-  var mytimeout = $timeout($scope.onCountdown,measureIntervall);
+  $scope.recordning = function(){
+    if(Math.abs($scope.recTimeLeft) > 0) {
+      if(!isStill){
+        $scope.recBtnTxt = "Record";
+        $scope.alerts = [{msg : 'Put your device on a flat surface', type:'danger', label:'Recording aborted!'}];
+        $scope.isDisabled = false;
+        $scope.$apply();
+        return;
+      }
+      $scope.recBtnTxt = "Recording: "+$scope.recTimeLeft+"s left";
+      $scope.$apply();
+      gyroString += Date.now()+','+$scope.gyroAlpha+','+$scope.gyroBeta+','+$scope.gyroGamma+'\n';
+      /*if ($scope.accR != undefined) {
+        motionString += Date.now()+','+$scope.accX+','+$scope.accY +','+$scope.accZ+','+$scope.accR.alpha+','+$scope.accR.beta +','+$scope.accR.gamma+'\n';
+      }else{*/
+        motionString += Date.now()+','+$scope.accX+','+$scope.accY +','+$scope.accZ+'\n';
+      //}
+      $scope.recTimeLeft = start - Math.floor(Date.now()/1000);
+      mytimeout = $timeout($scope.recordning,1);
+    }
+    else if($scope.recBtnTxt == "Recording: 1s left"){
+      $scope.isRecDone = true;
+      $scope.$apply();
+    }
+  }
+  var mytimeout = $timeout($scope.recordning,1);
 
   /* ===== ALERTS =====*/
   $scope.alerts = [];
