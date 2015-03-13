@@ -18,15 +18,15 @@ module.exports = function(app) {
 	app.post('/send',function(req,res){
 		var mailOptions = {
 		    from: 'Anna Karlsson, <gyrotion@gmail.com>',
-		    to: 'gyrotion@gmail.com',
-		    bcc: 'Anna.Karlsson@cybercom.com',
+		    to: 'Anna.Karlsson@cybercom.com',
+		    /*bcc: 'Anna.Karlsson@cybercom.com',*/
 		    subject: 'Gyrotion on '+ req.body.model,
 		    html: '<strong>From: </strong>'+req.body.mailfrom +'<br><strong>Browser: </strong>'+req.body.browser, // plaintext body
 		    attachments : [
-		    	{	
+		    	/*C{	
 		    		filename: 'camera.' + req.body.filetype,
 		    		streamSource: fs.createReadStream(req.files.file.path)
-		    	},
+		    	},*/
 		    	{
 		    		filename: 'motion.csv',
 		    		contents: req.body.motion,
