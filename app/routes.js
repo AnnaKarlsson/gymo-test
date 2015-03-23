@@ -1,6 +1,7 @@
 module.exports = function(app) {
+	var __dirname = './public';
 	app.get('/', function(req, res) {
-		res.sendFile('./public/index.html');
+		res.sendFile('index.html', { root: __dirname });
 	});
 	
 	// server routes ===========================================================
@@ -19,22 +20,16 @@ module.exports = function(app) {
 		var mailOptions = {
 		    from: 'Anna Karlsson, <gyrotion@gmail.com>',
 		    to: 'Anna.Karlsson@cybercom.com',
-		    /*bcc: 'Anna.Karlsson@cybercom.com',*/
 		    subject: 'Gyrotion on '+ req.body.model,
-		    html: '<strong>From: </strong>'+req.body.mailfrom +'<br><strong>Browser: </strong>'+req.body.browser, // plaintext body
+		    html: '<strong>From: </strong>'+req.body.mailfrom +'<br><strong>userAnget: </strong>'+req.body.browser, // plaintext body
 		    attachments : [
-		    	/*C{	
+		    	{	
 		    		filename: 'camera.' + req.body.filetype,
 		    		streamSource: fs.createReadStream(req.files.file.path)
-		    	},*/
-		    	{
-		    		filename: 'motion.csv',
-		    		contents: req.body.motion,
-		    		contentType: 'text/plain'
 		    	},
 		    	{
-		    		filename: 'gyro.csv',
-		    		contents: req.body.gyro,
+		    		filename: 'recordning.csv',
+		    		contents: req.body.recordning,
 		    		contentType: 'text/plain'
 		    	}]
 		};
@@ -55,7 +50,7 @@ module.exports = function(app) {
 	// frontend routes =========================================================
 	// route to handle all angular requests
 	app.get('*', function(req, res) {
-		res.sendFile('./public/index.html');
+		res.sendFile('index.html', { root: __dirname });
 	});
 
 };

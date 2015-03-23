@@ -1,5 +1,6 @@
 <div class="form-group" ng-class="{ 'has-error' : userForm.email.$invalid && !userForm.email.$pristine }">
   <h1>Submit</h1>
+  <p>This may take a few minutes since the movie should be uploaded. Submit is done when you see a green alert-text above.</p>
   <label>Your Email</label>
   <input type="email" name="email" class="form-control" ng-model="user.email" placeholder="your@email.nu" required/>
   <p ng-show="userForm.email.$invalid && !userForm.email.$pristine" class="help-block">Enter a valid email.</p>

@@ -1,2 +1,2 @@
 # gymo-test
-Test and record gyro and motion on mobile device
+Record camera, gyroscope and accelerometer on mobile device

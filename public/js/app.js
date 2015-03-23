@@ -1,9 +1,9 @@
 
 // create our angular app and inject ngAnimate and ui-router 
 // =============================================================================
-angular.module('gymoApp', ['ngAnimate', 'ui.router', 'Ctrl'])
+angular.module('gymoApp', ['ngAnimate', 'ui.router','Ctrl'])
 .config(['cfpLoadingBarProvider', function(cfpLoadingBarProvider) {
-    cfpLoadingBarProvider.includeSpinner = false;
+    cfpLoadingBarProvider.includeSpinner = true;
 }])
 
 // configuring our routes 

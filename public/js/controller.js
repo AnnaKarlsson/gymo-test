@@ -24,8 +24,7 @@ app.controller('Controller', function($scope, $timeout, $interval, $http) {
   $scope.isRecDone = false;
   $scope.isDisabled = false;
   $scope.param = {};
-  var gyroString = '';
-  var motionString = '';
+  var recString = 'time,alpha,beta,gamma,x,y,z,rot_alpha,rot_beta,rot_gamma\n';
   var isStill = true;
   var fd = new FormData();
   var hasFile = false;
@@ -35,19 +34,19 @@ app.controller('Controller', function($scope, $timeout, $interval, $http) {
   /* Motion listener */
   if(window.DeviceMotionEvent) {
     window.addEventListener('devicemotion', function(event) {
-      if(event.acceleration){
-        $scope.accX = event.acceleration.x;
-        $scope.accY = event.acceleration.y;
-        $scope.accZ = event.acceleration.z; 
-        $scope.accR = event.rotationRate;
-      }else if(event.accelerationIncludingGravity) {
+      if(event.accelerationIncludingGravity){
         $scope.accX = event.accelerationIncludingGravity.x;
         $scope.accY = event.accelerationIncludingGravity.y;
         $scope.accZ = event.accelerationIncludingGravity.z;
         $scope.accR = event.rotationRate;
+      }else if(event.acceleration) {
+        $scope.accX = event.acceleration.x;
+        $scope.accY = event.acceleration.y;
+        $scope.accZ = event.acceleration.z; 
+        $scope.accR = event.rotationRate;
       }
-      if (!event.acceleration) {
-        if(Math.abs($scope.accZ) > 8 && Math.abs($scope.accX) < 1 && Math.abs($scope.accY) < 1)
+      if ($scope.accR == undefined) {
+        if(Math.abs(event.accelerationIncludingGravity.z) > 8 && Math.abs($scope.accX) < 1 && Math.abs($scope.accY) < 1)
           isStill = true;
         else isStill = false;
       }else if (0 == ($scope.accR.beta).toFixed(0) && ($scope.accR.alpha).toFixed(0) == 0 && ($scope.accR.gamma).toFixed(0) == 0){
@@ -65,6 +64,19 @@ app.controller('Controller', function($scope, $timeout, $interval, $http) {
       }
     }, false);
   }
+  window.addEventListener("deviceready", function () {
+    $cordovaVibration.vibrate().then(success, error);
+  }, false);
+
+  /*Vibrate*/
+  $scope.vibrate = function() {
+    document.addEventListener("deviceready", function () {
+      $cordovaVibration.vibrate(1000);
+      $scope.alerts = [ {msg : 'vibrating?!', type:'info', label:'....'}];
+    }, false);
+    
+  };
+
   
 
   /* ===== RECORD ====== */
@@ -92,8 +104,7 @@ app.controller('Controller', function($scope, $timeout, $interval, $http) {
     if (isStill){
         isRecDone = false;
         $scope.isDisabled = true;
-        gyroString = '';
-        motionString = '';
+        recString = 'time,alpha,beta,gamma,x,y,z,rot_alpha,rot_beta,rot_gamma\n';
         start = Math.floor(Date.now()/1000) + time;
         $scope.recTimeLeft = start - Math.floor(Date.now()/1000);
         $scope.recordning();
@@ -115,21 +126,16 @@ app.controller('Controller', function($scope, $timeout, $interval, $http) {
       }
       $scope.recBtnTxt = "Recording: "+$scope.recTimeLeft+"s left";
       $scope.$apply();
-      gyroString += Date.now()+','+$scope.gyroAlpha+','+$scope.gyroBeta+','+$scope.gyroGamma+'\n';
-      /*if ($scope.accR != undefined) {
-        motionString += Date.now()+','+$scope.accX+','+$scope.accY +','+$scope.accZ+','+$scope.accR.alpha+','+$scope.accR.beta +','+$scope.accR.gamma+'\n';
-      }else{*/
-        motionString += Date.now()+','+$scope.accX+','+$scope.accY +','+$scope.accZ+'\n';
-      //}
+      recString += Date.now()+','+$scope.gyroAlpha+','+$scope.gyroBeta+','+$scope.gyroGamma+','+$scope.accX+','+$scope.accY +','+$scope.accZ+','+$scope.accR.alpha+','+$scope.accR.beta +','+$scope.accR.gamma+'\n';
       $scope.recTimeLeft = start - Math.floor(Date.now()/1000);
-      mytimeout = $timeout($scope.recordning,1);
+      mytimeout = $timeout($scope.recordning,5);
     }
     else if($scope.recBtnTxt == "Recording: 1s left"){
       $scope.isRecDone = true;
       $scope.$apply();
     }
   }
-  var mytimeout = $timeout($scope.recordning,1);
+  var mytimeout = $timeout($scope.recordning,5);
 
   /* ===== ALERTS =====*/
   $scope.alerts = [];
@@ -141,7 +147,6 @@ app.controller('Controller', function($scope, $timeout, $interval, $http) {
   };
 
   /* ===== Upload from CAMERA ===== */
-  /*C
   $scope.uploadFile = function(files) {
     //Take the first selected file
     if (files[0] != undefined) {
@@ -159,17 +164,16 @@ app.controller('Controller', function($scope, $timeout, $interval, $http) {
       $scope.$apply();
     }
     
-  };*/
+  };
 
   /* ===== SUBMIT & MAIL FORM DATA =====*/
   $scope.user = {};
   $scope.sendMail = function(isValid){
     $scope.onSending = true;
-    if(/*C$scope.hasFile && */$scope.isRecDone && isValid){
+    if($scope.hasFile && $scope.isRecDone && isValid){
       fd.append('mailfrom',  $scope.user.email);
       fd.append('model', $scope.deviceType+': '+$scope.deviceName);
-      fd.append('gyro', gyroString);
-      fd.append('motion', motionString);
+      fd.append('recordning', recString);
       fd.append('browser', navigator.vendor + '<br>' + navigator.userAgent + '<br>' + navigator.platform);
       $http.post('/send', fd, {
             transformRequest: angular.identity,
@@ -186,9 +190,9 @@ app.controller('Controller', function($scope, $timeout, $interval, $http) {
     }else if(!$scope.isRecDone){
       $scope.alerts = [{msg:'Please make a motion and gyro recording before sending', type:'danger', label:'Missing!'}];
       $scope.onSending = false;
-    /*C}else if(!$scope.hasFile){
+    }else if(!$scope.hasFile){
       $scope.onSending = false;
-      $scope.alerts = [{msg:'Please add a clip from your camera', type:'warning', label:'Record camera!'}];*/
+      $scope.alerts = [{msg:'Please add a clip from your camera', type:'warning', label:'Record camera!'}];
     }else if(!$scope.user.email){
       $scope.alerts = [{msg:'Please fill in your email', type:'warning', label:'Not enough info!'}];
       $scope.onSending = false;
