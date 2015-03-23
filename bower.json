@@ -4,7 +4,6 @@
   "dependencies": {
     "bootstrap": "latest",
     "angular": "latest",
-    "angular-route": "latest",
-    "angular-audio": "~1.4.1"
+    "angular-route": "latest"
   }
 }

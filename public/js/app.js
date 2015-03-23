@@ -3,7 +3,7 @@
 // =============================================================================
 angular.module('gymoApp', ['ngAnimate', 'ui.router','Ctrl'])
 .config(['cfpLoadingBarProvider', function(cfpLoadingBarProvider) {
-    cfpLoadingBarProvider.includeSpinner = true;
+    cfpLoadingBarProvider.includeSpinner = false;
 }])
 
 // configuring our routes 
