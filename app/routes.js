@@ -17,12 +17,8 @@ module.exports = function(app) {
 	});
 
 	app.post('/send',function(req,res){
-		var mailOptions = {
-		    from: 'Anna Karlsson, <gyrotion@gmail.com>',
-		    to: 'Anna.Karlsson@cybercom.com',
-		    subject: 'Gyrotion on '+ req.body.model,
-		    html: '<strong>From: </strong>'+req.body.mailfrom +'<br><strong>userAnget: </strong>'+req.body.browser, // plaintext body
-		    attachments : [
+		if (req.files.file != undefined) {
+			var attach = [
 		    	{	
 		    		filename: 'camera.' + req.body.filetype,
 		    		streamSource: fs.createReadStream(req.files.file.path)
@@ -31,8 +27,22 @@ module.exports = function(app) {
 		    		filename: 'recordning.csv',
 		    		contents: req.body.recordning,
 		    		contentType: 'text/plain'
-		    	}]
-		};
+		    	}];
+
+		}else {
+			var attach = [
+		    	{
+		    		filename: 'recordning.csv',
+		    		contents: req.body.recordning,
+				}];
+		}
+		var mailOptions = {
+		    from: 'Anna Karlsson, <gyrotion@gmail.com>',
+		    to: 'Anna.Karlsson@cybercom.com',
+		    subject: 'Sensor-data from '+ req.body.model,
+		    html: '<strong>From: </strong>'+req.body.mailfrom +'<br><strong>userAnget: </strong>'+req.body.browser, // plaintext body
+		    attachments : attach
+		}
 		// send mail with defined transport object
 		transporter.sendMail(mailOptions, function(error, info){
     		if(error){

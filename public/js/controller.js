@@ -23,13 +23,19 @@ app.controller('Controller', function($scope, $timeout, $interval, $http) {
   $scope.sampleProgress = 0;
   $scope.isRecDone = false;
   $scope.isDisabled = false;
-  $scope.param = {};
   var recString = 'time,alpha,beta,gamma,x,y,z,rot_alpha,rot_beta,rot_gamma\n';
   var isStill = true;
   var fd = new FormData();
-  var hasFile = false;
   var onSending = false;
   var time = 30;
+  var iOS = /(iPad|iPhone|iPod)/g.test( navigator.userAgent );
+  console.log('iOS? ' + iOS );
+  if ($scope.deviceName.indexOf("iP") > -1) {
+    $scope.hasFile = true;
+  }else{
+    $scope.hasFile = false;
+  }
+  console.log('hasFile? ' + $scope.hasFile);
 
   /* Motion listener */
   if(window.DeviceMotionEvent) {
@@ -158,8 +164,10 @@ app.controller('Controller', function($scope, $timeout, $interval, $http) {
         fd.append('filetype', 'MOV');
         fd.append('file', files[0]);
         $scope.hasFile = true;
+      } else if(iOS){
+        $scope.alerts = [{msg:'Your device does not support video-upload please proceed to the next step', type:'info', label:'Skip step'}];
       }else{
-        $scope.alerts = [{msg:'Record and upload a 5 seconds BLACK movie-clip', type:'danger', label:'Wrong!'}];
+        $scope.alerts = [{msg:'Record and upload a 5 seconds BLACK movie-clip', type:'danger', label:'Wrong'}];
       }
       $scope.$apply();
     }
