@@ -134,14 +134,14 @@ app.controller('Controller', function($scope, $timeout, $interval, $http) {
       $scope.$apply();
       recString += Date.now()+','+$scope.gyroAlpha+','+$scope.gyroBeta+','+$scope.gyroGamma+','+$scope.accX+','+$scope.accY +','+$scope.accZ+','+$scope.accR.alpha+','+$scope.accR.beta +','+$scope.accR.gamma+'\n';
       $scope.recTimeLeft = start - Math.floor(Date.now()/1000);
-      mytimeout = $timeout($scope.recordning,5);
+      mytimeout = $timeout($scope.recordning,10);
     }
     else if($scope.recBtnTxt == "Recording: 1s left"){
       $scope.isRecDone = true;
       $scope.$apply();
     }
   }
-  var mytimeout = $timeout($scope.recordning,5);
+  var mytimeout = $timeout($scope.recordning,10);
 
   /* ===== ALERTS =====*/
   $scope.alerts = [];
