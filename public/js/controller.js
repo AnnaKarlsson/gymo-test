@@ -188,7 +188,7 @@ app.controller('Controller', function($scope, $timeout, $interval, $http) {
             headers: {'Content-Type': undefined}
         })
         .success(function(){
-          $scope.alerts = [{msg:'Your recordings has been sent.', type:'success', label:'THANK YOU!'}];
+          $scope.alerts = [{msg:'Your recordings have been sent.', type:'success', label:'THANK YOU!'}];
           onSending = true;
         })
         .error(function(){
