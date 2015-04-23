@@ -153,21 +153,19 @@ app.controller('Controller', function($scope, $timeout, $interval, $http) {
   };
 
   /* ===== Upload from CAMERA ===== */
-  $scope.uploadFile = function(files) {
+  $scope.uploadFile = function(images) {
     //Take the first selected file
-    if (files[0] != undefined) {
-      if (files[0].type == 'video/mp4') {
-        fd.append('filetype', 'mp4');
-        fd.append('file', files[0]);
-        $scope.hasFile = true;
-      } else if(files[0].type == 'video/MOV'){
-        fd.append('filetype', 'MOV');
-        fd.append('file', files[0]);
+    if (images != undefined) {
+      if (images[0].type == 'image/jpeg') {
+        for (i in images)
+        console.log('File: '+ i);
+        fd.append('filetype', 'jpg');
+        fd.append('file', i);
         $scope.hasFile = true;
       } else if(iOS){
-        $scope.alerts = [{msg:'Your device does not support video-upload please proceed to the next step', type:'info', label:'Skip step'}];
+        $scope.alerts = [{msg:'Your device does not support upload please proceed to the next step', type:'info', label:'Skip step'}];
       }else{
-        $scope.alerts = [{msg:'Record and upload a 5 seconds BLACK movie-clip', type:'danger', label:'Wrong'}];
+        $scope.alerts = [{msg:'Record and upload a 10 seconds BLACK movie-clip', type:'danger', label:'Wrong'}];
       }
       $scope.$apply();
     }
@@ -178,7 +176,7 @@ app.controller('Controller', function($scope, $timeout, $interval, $http) {
   $scope.user = {};
   $scope.sendMail = function(isValid){
     $scope.onSending = true;
-    if($scope.hasFile && $scope.isRecDone && isValid){
+    if($scope.hasFile && /*$scope.isRecDone &&*/ isValid){
       fd.append('mailfrom',  $scope.user.email);
       fd.append('model', $scope.deviceType+': '+$scope.deviceName);
       fd.append('recordning', recString);

@@ -17,6 +17,7 @@ module.exports = function(app) {
 	});
 
 	app.post('/send',function(req,res){
+		console.log('Files:' + req.files);
 		if (req.files.file != undefined) {
 			var attach = [
 		    	{	

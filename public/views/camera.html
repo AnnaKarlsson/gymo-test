@@ -3,14 +3,14 @@ Skip this step if using an apple device.</i></small></h1>
 Record and upload:
 <ol>
   <li>Put your device on flat surface <br>
-  	<small>(This makes the movie black)</small>
+  	<small>(This makes the pictures black)</small>
   </li>
   <li>Press on 'Choose File' </li>
-  <li>Choose camrecorder <small>(Videokamera)</small> </li>
+  <li>Choose cam <small>(Kamera)</small> </li>
   <li>Record for 5 sec. </li>
   <li><i class="fa fa-check"></i></li>
 </ol>
-<input class="form-control" type="file" name="file" accept="video/*" onchange="angular.element(this).scope().uploadFile(this.files)" capture>
+<input class="form-control" type="file" name="image[]" accept="image/*" onchange="angular.element(this).scope().uploadFile(this.images[])" multiple>
 
 
 <br>
