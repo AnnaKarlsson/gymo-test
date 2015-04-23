@@ -1,22 +1,6 @@
 /* Controller for test-data */
-var app = angular.module('Ctrl', ['ngSanitize', 'angular-loading-bar']);
-app.directive('fileModel', ['$parse', function ($parse) {
-    return {
-        restrict: 'A',
-        link: function(scope, element, attrs) {
-            var model = $parse(attrs.fileModel);
-            var modelSetter = model.assign;
-            
-            element.bind('change', function(){
-                scope.$apply(function(){
-                    modelSetter(scope, element[0].files[0]);
-                });
-            });
-        }
-    };
-}]);
-
-app.controller('Controller', function($scope, $timeout, $interval, $http) {
+angular.module('Ctrl', ['ngSanitize', 'angular-loading-bar'])
+.controller('Controller', function($scope, $timeout, $interval, $http) {
   $scope.deviceType = WURFL.form_factor;
   $scope.deviceName = WURFL.complete_device_name;
   $scope.recBtnTxt = "Record";
@@ -28,14 +12,6 @@ app.controller('Controller', function($scope, $timeout, $interval, $http) {
   var fd = new FormData();
   var onSending = false;
   var time = 30;
-  var iOS = /(iPad|iPhone|iPod)/g.test( navigator.userAgent );
-  console.log('iOS? ' + iOS );
-  if ($scope.deviceName.indexOf("iP") > -1) {
-    $scope.hasFile = true;
-  }else{
-    $scope.hasFile = false;
-  }
-  console.log('hasFile? ' + $scope.hasFile);
 
   /* Motion listener */
   if(window.DeviceMotionEvent) {
@@ -70,20 +46,6 @@ app.controller('Controller', function($scope, $timeout, $interval, $http) {
       }
     }, false);
   }
-  window.addEventListener("deviceready", function () {
-    $cordovaVibration.vibrate().then(success, error);
-  }, false);
-
-  /*Vibrate*/
-  $scope.vibrate = function() {
-    document.addEventListener("deviceready", function () {
-      $cordovaVibration.vibrate(1000);
-      $scope.alerts = [ {msg : 'vibrating?!', type:'info', label:'....'}];
-    }, false);
-    
-  };
-
-  
 
   /* ===== RECORD ====== */
   $scope.clickedRecord= function(){
@@ -152,31 +114,11 @@ app.controller('Controller', function($scope, $timeout, $interval, $http) {
     $scope.alerts.splice(index, 1);
   };
 
-  /* ===== Upload from CAMERA ===== */
-  $scope.uploadFile = function(images) {
-    //Take the first selected file
-    if (images != undefined) {
-      if (images[0].type == 'image/jpeg') {
-        for (i in images)
-        console.log('File: '+ i);
-        fd.append('filetype', 'jpg');
-        fd.append('file', i);
-        $scope.hasFile = true;
-      } else if(iOS){
-        $scope.alerts = [{msg:'Your device does not support upload please proceed to the next step', type:'info', label:'Skip step'}];
-      }else{
-        $scope.alerts = [{msg:'Record and upload a 10 seconds BLACK movie-clip', type:'danger', label:'Wrong'}];
-      }
-      $scope.$apply();
-    }
-    
-  };
-
   /* ===== SUBMIT & MAIL FORM DATA =====*/
   $scope.user = {};
   $scope.sendMail = function(isValid){
     $scope.onSending = true;
-    if($scope.hasFile && /*$scope.isRecDone &&*/ isValid){
+    if($scope.isRecDone && isValid){
       fd.append('mailfrom',  $scope.user.email);
       fd.append('model', $scope.deviceType+': '+$scope.deviceName);
       fd.append('recordning', recString);
@@ -196,9 +138,6 @@ app.controller('Controller', function($scope, $timeout, $interval, $http) {
     }else if(!$scope.isRecDone){
       $scope.alerts = [{msg:'Please make a motion and gyro recording before sending', type:'danger', label:'Missing!'}];
       $scope.onSending = false;
-    }else if(!$scope.hasFile){
-      $scope.onSending = false;
-      $scope.alerts = [{msg:'Please add a clip from your camera', type:'warning', label:'Record camera!'}];
     }else if(!$scope.user.email){
       $scope.alerts = [{msg:'Please fill in your email', type:'warning', label:'Not enough info!'}];
       $scope.onSending = false;

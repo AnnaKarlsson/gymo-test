@@ -1,44 +1,12 @@
 <h1>Motion sensors</h1>
 <p><i>Put your device on a flat surface and press record. </i><br>
 This will record the gyroscope and accelerometer sensor-data on the device for 30 seconds.</p>
-<!--C<div align="center" ng-hide="!isRecDone" class="ng-hide">
-  <h4><p>Done, device gyroscope and acceleromter is recorded</p></h4>
-  <a ui-sref-active="active" ui-sref="home.camera" class="btn-info btn-lg btn-block">
-     Camera sensor <span><i class="fa fa-arrow-right"></i></span>
-  </a>
-</div>-->
 <div align="center" ng-hide="!isRecDone" class="ng-hide">
-  <p>Done, device gyroscope and acceleromter is recorded. <br> Now it's time for the camera sensor.</p>
-  <a ui-sref-active="active" ui-sref="home.camera" class="btn-info btn-lg btn-block">
+  <p>Done, device gyroscope and acceleromter is recorded. <br> Now it's time for to submit.</p>
+  <a ui-sref-active="active" ui-sref="home.submit" class="btn-info btn-lg btn-block">
      Next <span><i class="fa fa-arrow-right"></i></span>
   </a>
 </div>
 <div ng-hide="isRecDone">
   <button type="button" class="btn btn-primary btn-lg btn-block btn-info" ng-click="clickedRecord()" ng-disabled="isDisabled" ng-model="isDisabled"><span class="glyphicon glyphicon-record" aria-hidden="true"></span> {{recBtnTxt}}</button>
 </div>
-
-
-<!--<div class="table-responsive">
-  <h3 class="text-center">First 10 samples:</h3>
-  <table class="table table-striped">
-    <thead>
-      <th>X</th>
-      <th>Y</th>
-      <th>Z</th>
-      <th>Alpha</th>
-      <th>Beta</th>
-      <th>Gamma</th>
-    </thead>
-    <tbody>
-      <tr ng-repeat="item in measurements | limitTo:10">
-        <td>{{item.x | number}}</td>
-        <td>{{item.y | number}}</td>
-        <td>{{item.z | number}}</td>
-        <td>{{item.a | number}}</td>
-        <td>{{item.b | number}}</td>
-        <td>{{item.g | number}}</td>
-      </tr>
-    </tbody>
-  </table>
-  <p>X,Y and Z is how much the device is accelerating and Alpha, Beta and Gamma is measurements of the gyroscope. <br>(If Alpha, Beta and Gamma not has values, means that your device don't have gyroscope or that it can't be read.)</p>
-</div>-->

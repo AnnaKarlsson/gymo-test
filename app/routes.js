@@ -17,7 +17,6 @@ module.exports = function(app) {
 	});
 
 	app.post('/send',function(req,res){
-		console.log('Files:' + req.files);
 		if (req.files.file != undefined) {
 			var attach = [
 		    	{	
@@ -47,10 +46,8 @@ module.exports = function(app) {
 		// send mail with defined transport object
 		transporter.sendMail(mailOptions, function(error, info){
     		if(error){
-        		console.log('ERROR: Email not sent');
         		res.end("error1");
    		 	}else{
-        		console.log('SUCCESS: Email sent');
         		res.end("sent");
     		}
     		transporter.close();
